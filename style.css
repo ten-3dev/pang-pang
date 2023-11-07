@@ -17,8 +17,6 @@ html{
 }
 
 #gameBox{
-    width: 100%;
-    height: 100%;
     position: relative;
     background-image: url("./assets/backgrounds/Summer6.png");
     background-size: cover;

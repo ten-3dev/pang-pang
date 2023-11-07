@@ -1,28 +1,42 @@
-class Animation {
-    constructor(ElementId, sprite, framesPerSecond, numColumns, x, y) {
-        this.canvas = document.getElementById(ElementId);
-        this.context = this.canvas.getContext('2d');
-        this.sprite = sprite;
+// Canvas 관련 기능 클래스
+class CanvasProvider {
+    constructor(elementId) {
+        this.canvasElement = document.getElementById(elementId);
+        this.context = this.canvasElement.getContext('2d');
+    }
+
+    getCanvasElement() {
+        return this.canvasElement;
+    }
+
+    getContext() {
+        return this.context;
+    }
+
+    clearCanvas() {
+        this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+    }
+}
+
+// 스프라이트 관련 기능 클래스
+class SpriteAnimator {
+    constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
+        this.canvasElement = canvasProvider.getCanvasElement();
+        this.context = canvasProvider.getContext();
+        this.spriteImage = spriteImage;
         this.framesPerSecond = framesPerSecond;
         this.numColumns = numColumns;
-        this.frameWidth = sprite.width / numColumns;
-        this.frameHeight = sprite.height;
+        this.frameWidth = spriteImage.width / numColumns;
+        this.frameHeight = spriteImage.height;
         this.currentFrame = this.column = this.row = 0;
         this.maxFrame = numColumns;
         this.x = x;
         this.y = y;
+        this.scale = scale;
         this.lastTimestamp = 0;
         this.frameInterval = 1000 / this.framesPerSecond;
     }
 
-    // 객체를 생성하지 않고도 사용할 수 있도록 static으로 생성
-    static clear(ElementId){
-        const canvas = document.getElementById(ElementId);
-        const context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    // 프레임 속도 조절
     shouldUpdateFrame(timestamp) {
         const elapsed = timestamp - this.lastTimestamp;
         if (elapsed >= this.frameInterval) {
@@ -32,7 +46,6 @@ class Animation {
         return false;
     }
 
-    // 스프라이트 이미지 위치 업데이트
     update(timestamp) {
         if (this.shouldUpdateFrame(timestamp)) {
             this.currentFrame = (this.currentFrame + 1) % this.maxFrame;
@@ -45,21 +58,21 @@ class Animation {
         this.update(performance.now());
 
         this.context.drawImage(
-            this.sprite,
+            this.spriteImage,
             this.column * this.frameWidth,
             this.row * this.frameHeight,
             this.frameWidth,
             this.frameHeight,
             this.x,
             this.y,
-            this.frameWidth,
-            this.frameHeight
+            this.frameWidth * this.scale,
+            this.frameHeight * this.scale
         );
     }
 }
 
-class SpriteAnimation extends Animation {
-    constructor(ElementId, sprite, framesPerSecond, numColumns, x, y) {
-        super(ElementId, sprite, framesPerSecond, numColumns, x, y);
+class SpriteAnimation extends SpriteAnimator {
+    constructor(elementId, spriteImage, framesPerSecond, numColumns, x, y, scale) {
+        super(new CanvasProvider(elementId), spriteImage, framesPerSecond, numColumns, x, y, scale);
     }
 }

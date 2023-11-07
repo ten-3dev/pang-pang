@@ -1,20 +1,18 @@
-const ElementId = "gameBox"
-
+const elementId = "gameBox";
+const canvasProvider = new CanvasProvider(elementId);
 const spriteImage = new Image();
 spriteImage.src = './assets/character/2/Idle.png';
 
-const spriteAnimation1 = new SpriteAnimation(ElementId, spriteImage, 10, 4, 50, 50);
-const spriteAnimation2 = new SpriteAnimation(ElementId, spriteImage, 10, 4, 50, 100);
+spriteImage.onload = function () {
+    const spriteAnimation1 = new SpriteAnimation(elementId, spriteImage, 10, 4, 50, 50, 4);
+    const spriteAnimation2 = new SpriteAnimation(elementId, spriteImage, 10, 4, 50, 200, 4);
 
-function animate() {
-    requestAnimationFrame(animate);
-    Animation.clear(ElementId);
+    function animate() {
+        requestAnimationFrame(animate);
+        canvasProvider.clearCanvas();
+        spriteAnimation1.draw();
+        spriteAnimation2.draw();
+    }
 
-    spriteAnimation1.draw();
-    spriteAnimation2.draw();
-}
-
-spriteImage.onload = function() {
-    // Start the animation loop
-    animate();
+    animate(); // 애니메이션 시작
 };
