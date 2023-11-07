@@ -1,4 +1,4 @@
-const menu = new Menu(canvasProvider)
+const menu = new Menu()
 const game = new Game()
 
 // 리소스 로딩을 모두 끝낸 후에 메뉴 시작

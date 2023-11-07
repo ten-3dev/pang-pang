@@ -46,6 +46,11 @@ class SpriteAnimator {
         return false;
     }
 
+    changeX_Y(x, y){
+        this.x = x;
+        this.y = y;
+    }
+
     update(timestamp) {
         if (this.shouldUpdateFrame(timestamp)) {
             this.currentFrame = (this.currentFrame + 1) % this.maxFrame;
@@ -74,10 +79,5 @@ class SpriteAnimator {
 class SpriteAnimation extends SpriteAnimator {
     constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
         super(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale);
-    }
-
-    changeX_Y(x, y){
-        this.x = x;
-        this.y = y;
     }
 }

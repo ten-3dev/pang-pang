@@ -1,8 +1,7 @@
 class Menu{
-    constructor(canvasProvider){
-        this.canvasProvider = canvasProvider;
-        this.canvas = this.canvasProvider.getCanvasElement();
-        this.context = this.canvasProvider.getContext();
+    constructor(){
+        this.canvas = canvasProvider.getCanvasElement();
+        this.context = canvasProvider.getContext();
         this.menuItems = ["Start Game", "Exit"];
         this.selectedItem = 0;
         this.selectedChar = 0;
@@ -52,11 +51,6 @@ class Menu{
         }
     }
 
-    // 모두 지우기
-    clear(){
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-
     // 메뉴 선택 그리기
     menuDraw(){
         for (let i = 0; i < this.menuItems.length; i++) {
@@ -86,7 +80,7 @@ class Menu{
     }
 
     // 캐릭터 위치 선정 및 그리기
-    menuCharacter(){
+    characterDraw(){
         const character = characters[this.selectedChar];
         const x = this.menuX - character.frameWidth;
         const y = this.menuY - 250;
@@ -96,10 +90,12 @@ class Menu{
 
     // 시작
     start(){
-        toggle = true;
-        this.clear();
+        values.toggle = true;
+        values.character = characters[this.selectedChar]
+
+        canvasProvider.clearCanvas();
         this.menuDraw();
         this.createStroke(this.context, 'blue', 8, 180, 200, 180, 160);
-        this.menuCharacter();
+        this.characterDraw();
     }
 }

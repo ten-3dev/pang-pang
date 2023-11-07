@@ -1,6 +1,11 @@
 const canvasProvider = new CanvasProvider('menuCanvas');
 let toggle = true;
 
+let values = {
+    toggle: true,
+    character: ''
+}
+
 function changeToggle(){
     canvasProvider.clearCanvas();
     toggle = !toggle;
