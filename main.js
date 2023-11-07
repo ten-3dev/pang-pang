@@ -1,30 +1,16 @@
-const canvasProvider = new CanvasProvider('menuCanvas');
+const menu = new Menu(canvasProvider)
+const game = new Game()
 
-const idleCharacterItems = [
-    './assets/character/1/Idle.png',
-    './assets/character/2/Idle.png',
-    './assets/character/3/Idle.png',
-    './assets/character/4/Idle.png',
-    './assets/character/5/Idle.png',
-    './assets/character/6/Idle.png',
-    './assets/character/7/Idle.png',
-    './assets/character/8/Idle.png',
-    './assets/character/9/Idle.png',
-];
-const characters = [];
-
-for(let i = 0; i < idleCharacterItems.length; i++){
-    const spriteImg = new Image();
-    spriteImg.src = idleCharacterItems[i];
-
-    characters.push(new SpriteAnimation(canvasProvider, spriteImg, 10, 4, 0, 0, 4));
+// 리소스 로딩을 모두 끝낸 후에 메뉴 시작
+window.onload = () => {
+    function animate() {
+        requestAnimationFrame(animate);
+        if(toggle){
+            menu.start()
+        }else{
+            game.start()
+        }
+    }
+    
+    animate(); // 애니메이션 시작
 }
-
-const menu = new Menu(canvasProvider, characters)
-
-function animateMenu() {
-    requestAnimationFrame(animateMenu);
-    menu.draw();
-}
-
-animateMenu();

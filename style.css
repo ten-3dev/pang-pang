@@ -16,7 +16,7 @@ html{
     padding: 30px;
 }
 
-#gameCanvas, #menuCanvas{
+#menuCanvas{
     position: relative;
     background-image: url("./assets/backgrounds/Summer6.png");
     background-size: cover;
