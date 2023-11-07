@@ -16,26 +16,9 @@ html{
     padding: 30px;
 }
 
-#gameBox{
+#gameCanvas, #menuCanvas{
     position: relative;
     background-image: url("./assets/backgrounds/Summer6.png");
     background-size: cover;
     background-repeat: no-repeat;
-}
-
-
-#character {
-    position: absolute;
-    bottom: -1px;
-    width: 152px;
-    height: 206px;
-    background-image:url("./assets/character/10/Idle.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    animation:walk .6s steps(4) infinite;
-}
-
-@keyframes walk {
-    0% { background-position:0 }
-    100% { background-position:-820px }
 }

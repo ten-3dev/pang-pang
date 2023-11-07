@@ -72,7 +72,12 @@ class SpriteAnimator {
 }
 
 class SpriteAnimation extends SpriteAnimator {
-    constructor(elementId, spriteImage, framesPerSecond, numColumns, x, y, scale) {
-        super(new CanvasProvider(elementId), spriteImage, framesPerSecond, numColumns, x, y, scale);
+    constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
+        super(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale);
+    }
+
+    changeX_Y(x, y){
+        this.x = x;
+        this.y = y;
     }
 }
