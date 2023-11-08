@@ -1,15 +1,11 @@
 const canvasProvider = new CanvasProvider('menuCanvas');
-let toggle = true;
 
-let values = {
+const initialState = {
     toggle: true,
     character: ''
-}
+};
 
-function changeToggle(){
-    canvasProvider.clearCanvas();
-    toggle = !toggle;
-}
+let state = { ...initialState };
 
 const characters_src = [
     './assets/character/1/Idle.png',
@@ -24,7 +20,11 @@ const characters_src = [
 ];
 const characters = [];
 
-// 재귀를 이용해 모든 이미지가 로딩에 성공하면 화면에 표시
+function changeToggle() {
+    canvasProvider.clearCanvas();
+    state.toggle = !state.toggle;
+}
+
 function loadCharacterImages(index) {
     if (index >= characters_src.length) {
         return;
@@ -34,10 +34,14 @@ function loadCharacterImages(index) {
     characterImg.src = characters_src[index];
     characterImg.onload = () => {
         characters.push(new SpriteAnimation(canvasProvider, characterImg, 10, 4, 0, 0, 4));
-        // 다음 이미지 로딩을 시작
         loadCharacterImages(index + 1);
     };
 }
 
-// 0번째 캐릭터 이미지 로딩 시작
+
+function resetState() {
+    state = { ...initialState };
+}
+
+
 loadCharacterImages(0);

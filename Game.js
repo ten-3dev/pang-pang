@@ -3,11 +3,11 @@ class Game {
     }
 
     characterInitPosition(){
-        const x = ((canvasProvider.getCanvasElement().width) / 2) - values.character.frameWidth;
-        const y = canvasProvider.getCanvasElement().height - (values.character.frameHeight * values.character.scale);
+        const x = ((canvasProvider.getCanvasElement().width) / 2) - state.character.frameWidth;
+        const y = canvasProvider.getCanvasElement().height - (state.character.frameHeight * state.character.scale);
         canvasProvider.clearCanvas();
-        values.character.changeX_Y(x, y);
-        values.character.draw();
+        state.character.changeX_Y(x, y);
+        state.character.draw();
     }
 
     start(){

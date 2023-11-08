@@ -90,8 +90,8 @@ class Menu{
 
     // 시작
     start(){
-        values.toggle = true;
-        values.character = characters[this.selectedChar]
+        state.toggle = true;
+        state.character = characters[this.selectedChar]
 
         canvasProvider.clearCanvas();
         this.menuDraw();

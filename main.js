@@ -5,7 +5,7 @@ const game = new Game()
 window.onload = () => {
     function animate() {
         requestAnimationFrame(animate);
-        if(toggle){
+        if(state.toggle){
             menu.start()
         }else{
             game.start()
