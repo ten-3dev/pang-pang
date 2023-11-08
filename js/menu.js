@@ -17,24 +17,32 @@ class Menu{
         console.log('메뉴 시작');
         this.context.textAlign = "center";
         this.context.font = this.menuFont;
-        this.initListeners();
+        // this.initListeners();
     }
 
-    // 리스너 함수
-    initListeners() {
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowUp' && this.selectedItem > 0) {
-                this.selectedItem--;
-            } else if (event.key === 'ArrowDown' && this.selectedItem < this.menuItems.length - 1) {
-                this.selectedItem++;
-            } else if (event.key === 'ArrowLeft' && this.selectedChar > 0) {
-                this.selectedChar--;
-            } else if (event.key === 'ArrowRight' && this.selectedChar < characters.length - 1) {
-                this.selectedChar++;
-            } else if (event.key === 'Enter') {
-                this.handleMenu();
-            }
-        });
+    // 조작 함수
+    arrowUp(){
+        if (this.selectedItem > 0) {
+            this.selectedItem--;
+        }
+    }
+    arrowDown(){
+        if (this.selectedItem < this.menuItems.length - 1) {
+            this.selectedItem++;
+        }
+    }
+    arrowLeft(){
+        if (this.selectedChar > 0) {
+            this.selectedChar--;
+        }
+    }
+    arrowRight(){
+        if (this.selectedChar < gameConfig.characters.length - 1) {
+            this.selectedChar++;
+        }
+    }
+    enter(){
+        this.handleMenu();
     }
 
     handleMenu() {
@@ -42,7 +50,10 @@ class Menu{
             case 0:
                 // Start Game
                 console.log("Start Game selected");
-                changeToggle();
+                canvasProvider.clearCanvas();
+                gameConfig.characterIDX = this.selectedChar;
+                // 게임으로 전환
+                gameConfig.changeGame();
                 break;
             case 1:
                 // Exit
@@ -81,7 +92,7 @@ class Menu{
 
     // 캐릭터 위치 선정 및 그리기
     characterDraw(){
-        const character = characters[this.selectedChar];
+        const character = gameConfig.characters[this.selectedChar];
         const x = this.menuX - character.frameWidth;
         const y = this.menuY - 250;
         character.changeX_Y(x - 15, y);
@@ -90,9 +101,6 @@ class Menu{
 
     // 시작
     start(){
-        state.toggle = true;
-        state.character = characters[this.selectedChar]
-
         canvasProvider.clearCanvas();
         this.menuDraw();
         this.createStroke(this.context, 'blue', 8, 180, 200, 180, 160);

@@ -76,7 +76,7 @@ class SpriteAnimator {
     }
 }
 
-class SpriteAnimation extends SpriteAnimator {
+class CharacterAnimate extends SpriteAnimator {
     constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
         super(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale);
     }
