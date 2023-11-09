@@ -1,53 +1,17 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 
-class Box {
-  constructor(x, y, size) {
-    this.x = x;
-    this.y = y;
-    this.size = size;
-    this.dx = 0; // X 방향 이동 속도
-  }
+var spriteImage = new Image();
+spriteImage.src = './assets/character/1/Idle.png'; // 스프라이트 이미지 파일 경로
 
-  draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillRect(this.x, this.y, this.size, this.size);
-  }
+spriteImage.onload = function () {
+    // 이미지를 원래 크기로 그림
+    // ctx.drawImage(spriteImage, 0, 0);
 
-  move() {
-    this.x += this.dx;
-  }
-}
+    // 이미지를 좌우로 반전하여 그림
+    ctx.scale(-1, 1); // X 방향으로 -1을 곱함 (좌우 반전)
+    ctx.drawImage(spriteImage, -spriteImage.width, 0);
 
-var box = new Box(50, 50, 50);
-
-// 키보드 이벤트 핸들러 함수
-document.addEventListener("keydown", function (event) {
-  switch (event.key) {
-    case "ArrowLeft":
-      box.dx = -10;
-      break;
-    case "ArrowRight":
-      box.dx = 10;
-      break;
-  }
-});
-
-document.addEventListener("keyup", function (event) {
-  switch (event.key) {
-    case "ArrowLeft":
-    case "ArrowRight":
-      box.dx = 0;
-      break;
-  }
-});
-
-// 애니메이션 프레임 업데이트
-function update() {
-  box.move();
-  box.draw();
-  requestAnimationFrame(update);
-}
-
-// 초기 애니메이션 시작
-update();
+    // 다시 원래 크기로 복원
+    // ctx.scale(-1, 1); // 원래 크기로 돌려놓음
+};

@@ -76,6 +76,7 @@ class SpriteAnimator {
 
     draw() {
         this.update(performance.now());
+      
         this.x += this.dxr + this.dxl;
         this.y += this.dy;
 
@@ -96,5 +97,20 @@ class SpriteAnimator {
 class CharacterAnimate extends SpriteAnimator {
     constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
         super(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale);
+        this.isFlipped = false; // 이미지가 좌우로 반전여부
+    }
+
+    // 벽 감지 메서드
+    wall_collision_detection(){
+        // 감지 딜레이 때문에 그리기 단계에서 벽 충돌 감지
+        if (this.dxl < 0 && this.x <= 0 || this.dxr > 0 && this.x >= 1080) {
+            this.dxl = 0; // 왼쪽 벽에 닿으면 이동을 멈춤
+            this.dxr = 0; // 오른쪽쪽 벽에 닿으면 이동을 멈춤
+        }
+    }
+
+    draw(){
+        this.wall_collision_detection();
+        super.draw();
     }
 }
