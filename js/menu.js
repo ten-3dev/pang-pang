@@ -17,7 +17,6 @@ class Menu{
         console.log('메뉴 시작');
         this.context.textAlign = "center";
         this.context.font = this.menuFont;
-        // this.initListeners();
     }
 
     // 조작 함수
