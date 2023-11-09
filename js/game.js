@@ -1,7 +1,8 @@
 class Game {
     constructor() {
         this.character = null;
-        this.characterDx = 0;
+        this.characterDxr = 0;
+        this.characterDxl = 0;
         this.characterDy = 0;
         this.initialized = false;
     }
@@ -16,17 +17,20 @@ class Game {
             const characterInitX = ((canvasProvider.getCanvasElement().width) / 2) - this.character.frameWidth;
             const characterInitY = canvasProvider.getCanvasElement().height - (this.character.frameHeight * this.character.scale);
             this.character.changeX_Y(characterInitX, characterInitY);
-        }else{
-            this.character.moveDx(this.characterDx);    
         }
     }
 
     arrowLeft(){
-        this.characterDx = -10;
+        this.character.moveDxl(-10);
     }
     
     arrowRight(){
-        this.characterDx = 10;
+        this.character.moveDxr(10);
+    }
+
+    stopX(){
+        this.character.moveDxr(0);
+        this.character.moveDxl(0);
     }
 
     start(){

@@ -32,7 +32,8 @@ class SpriteAnimator {
         this.maxFrame = numColumns;
         this.x = x;
         this.y = y;
-        this.dx = 0;
+        this.dxr = 0;
+        this.dxl = 0;
         this.dy = 0;
         this.scale = scale;
         this.lastTimestamp = 0;
@@ -53,14 +54,16 @@ class SpriteAnimator {
         this.y = y;
     }
 
-    moveDx(dx){
-        this.dx = dx;
-        this.x += this.dx;
+    moveDxr(dxr){
+        this.dxr = dxr;
+    }
+
+    moveDxl(dxl){
+        this.dxl = dxl;
     }
 
     moveDy(dy){
         this.dy = dy;
-        this.y += this.dy;
     }
 
     update(timestamp) {
@@ -73,6 +76,8 @@ class SpriteAnimator {
 
     draw() {
         this.update(performance.now());
+        this.x += this.dxr + this.dxl;
+        this.y += this.dy;
 
         this.context.drawImage(
             this.spriteImage,

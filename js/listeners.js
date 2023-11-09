@@ -41,3 +41,20 @@ function listener(menu, game, pause){
         }
     });
 }
+
+
+
+document.addEventListener("keyup", function (event) {
+    switch(event.key){
+        case 'ArrowLeft':
+            if(gameConfig.state === 'game'){
+                game.stopX();
+            }
+            break;
+        case 'ArrowRight':
+            if(gameConfig.state === 'game'){
+                game.stopX();
+            }
+            break;
+    }
+});
