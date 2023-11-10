@@ -102,6 +102,11 @@ class CharacterAnimate extends SpriteAnimator {
         this.isFlipped = false; // 이미지가 좌우로 반전여부
     }
 
+    // 객체의 바뀌는 수(스프라이트를 얼마나 자를건가)를 변경
+    changeNumColumns(numColumns){
+        this.numColumns = numColumns;
+    }
+
     // 객체의 img 를 변경
     changeImage(newSpriteImage) {
         this.spriteImage = newSpriteImage;

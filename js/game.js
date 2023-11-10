@@ -45,9 +45,12 @@ class Game {
 
     start(){
         this.init();
+        console.log(this.character.numColumns);
         if(this.character.dxr != 0 || this.character.dxl != 0){
+            this.character.changeNumColumns(6);
             this.character.changeImage(this.characterWalk);
         }else{
+            this.character.changeNumColumns(4);
             this.character.changeImage(this.characterIdle); 
         }
         this.character.draw();
