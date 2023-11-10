@@ -27,6 +27,18 @@ class Game {
         }
     }
 
+    // 충돌 감지 메서드
+    // 원과 사각형의 충돌 감지
+    detectCollision(circle, rect) {
+        const circleX = circle.x;
+        const circleY = circle.y;
+        const circleRadius = circle.radius;
+        const rectX = rect.x;
+        const rectY = rect.y;
+        const rectWidth = rect.width;
+        const rectHeight = rect.height;
+    }
+
     arrowLeft(){
         this.character.isFlipped = true;
         this.character.moveDxl(-10);
@@ -54,8 +66,9 @@ class Game {
         this.character.draw();
 
         if(!this.ball){
-            this.ball = new Ball(canvasProvider, 450, 550, 100, 100, 'assets/balls/ball1.png');
+            this.ball = new Ball(canvasProvider, 450, 600, 100, 'assets/balls/ball1.png');
         }
         this.ball.draw();
+        console.log(this.detectCollision(this.ball.getHitBoxPosition(), this.character.getHitBoxPosition()));
     }
 }
