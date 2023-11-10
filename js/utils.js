@@ -40,6 +40,7 @@ class SpriteAnimator {
         this.frameInterval = 1000 / this.framesPerSecond;
     }
 
+    // 스프라이트 변경 속도 조절 메서드
     shouldUpdateFrame(timestamp) {
         const elapsed = timestamp - this.lastTimestamp;
         if (elapsed >= this.frameInterval) {
@@ -49,22 +50,23 @@ class SpriteAnimator {
         return false;
     }
 
+    // 위치 변경
     changeX_Y(x, y){
         this.x = x;
         this.y = y;
     }
 
+    // 이동 메서드
     moveDxr(dxr){
         this.dxr = dxr;
     }
-
     moveDxl(dxl){
         this.dxl = dxl;
     }
-
     moveDy(dy){
         this.dy = dy;
     }
+
 
     update(timestamp) {
         if (this.shouldUpdateFrame(timestamp)) {
@@ -100,10 +102,12 @@ class CharacterAnimate extends SpriteAnimator {
         this.isFlipped = false; // 이미지가 좌우로 반전여부
     }
 
+    // 객체의 img 를 변경
     changeImage(newSpriteImage) {
         this.spriteImage = newSpriteImage;
     }
 
+    // 이미지의 좌우반전
     flipImage(img) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
