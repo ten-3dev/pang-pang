@@ -18,6 +18,27 @@ class CanvasProvider {
     }
 }
 
+// Ball 관련 기능 클래스
+class Ball {
+    constructor(canvasProvider, x, y, radius, speed, imageSrc) {
+        this.canvasElement = canvasProvider.getCanvasElement();
+        this.context = canvasProvider.getContext();
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.speed = speed;
+        this.dx = this.speed;
+        this.dy = this.speed;
+        this.image = new Image();
+        this.image.src = imageSrc;
+    }
+
+    draw() {
+        this.context.drawImage(this.image, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
+    }
+}
+
+
 // 스프라이트 관련 기능 클래스
 class SpriteAnimator {
     constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {

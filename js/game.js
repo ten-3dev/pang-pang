@@ -3,7 +3,7 @@ class Game {
         this.character = null;
         this.characterWalk = null;
         this.characterIdle = null;
-        this.initialized = false;
+        this.ball = null;
     }
 
     init(){
@@ -11,9 +11,8 @@ class Game {
         canvasProvider.clearCanvas();
 
         // 첫 실행 시 초기 위치 설정
-        if(!this.initialized){
+        if(!this.characterIdle || !this.characterWalk){
             // 초기 위치값 잡아주기
-            this.initialized = true;
             const characterInitX = ((canvasProvider.getCanvasElement().width) / 2) - this.character.frameWidth;
             const characterInitY = canvasProvider.getCanvasElement().height - (this.character.frameHeight * this.character.scale);
             this.character.changeX_Y(characterInitX, characterInitY);
@@ -45,7 +44,6 @@ class Game {
 
     start(){
         this.init();
-        console.log(this.character.numColumns);
         if(this.character.dxr != 0 || this.character.dxl != 0){
             this.character.changeNumColumns(6);
             this.character.changeImage(this.characterWalk);
@@ -54,5 +52,10 @@ class Game {
             this.character.changeImage(this.characterIdle); 
         }
         this.character.draw();
+
+        if(!this.ball){
+            this.ball = new Ball(canvasProvider, 450, 550, 100, 100, 'assets/balls/ball1.png');
+        }
+        this.ball.draw();
     }
 }
