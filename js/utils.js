@@ -100,6 +100,10 @@ class CharacterAnimate extends SpriteAnimator {
         this.isFlipped = false; // 이미지가 좌우로 반전여부
     }
 
+    changeImage(newSpriteImage) {
+        this.spriteImage = newSpriteImage;
+    }
+
     flipImage(img) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');

@@ -19,7 +19,7 @@ const initGameConfig = {
     // 선택한 캐릭터 idx
     characterIDX: 0,
 
-    // 게임-메뉴 간 토글 변수 및 함수
+    // 게임-메뉴-중지 간 토글 변수 및 함수
     state_type: ['menu', 'game', 'pause'],
     state: 'menu',
 
