@@ -100,17 +100,47 @@ class CharacterAnimate extends SpriteAnimator {
         this.isFlipped = false; // 이미지가 좌우로 반전여부
     }
 
+    flipImage(img) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.scale(-1, 1);
+        ctx.drawImage(img, -img.width, 0);
+        const flippedImg = new Image();
+        flippedImg.src = canvas.toDataURL();
+        return flippedImg;
+    }
+
     // 벽 감지 메서드
     wall_collision_detection(){
-        // 감지 딜레이 때문에 그리기 단계에서 벽 충돌 감지
-        if (this.dxl < 0 && this.x <= 0 || this.dxr > 0 && this.x >= 1080) {
+        if (this.dxl < 0 && this.x <= -30 || this.dxr > 0 && this.x >= 1090) {
             this.dxl = 0; // 왼쪽 벽에 닿으면 이동을 멈춤
             this.dxr = 0; // 오른쪽쪽 벽에 닿으면 이동을 멈춤
         }
     }
 
+    // 재정의
     draw(){
         this.wall_collision_detection();
-        super.draw();
+
+        super.update(performance.now());
+
+        this.x += this.dxr + this.dxl;
+        this.y += this.dy;
+
+        this.context.drawImage(
+            // 좌우반전
+            this.isFlipped ? this.flipImage(this.spriteImage) : this.spriteImage,
+            this.column * this.frameWidth,
+            this.row * this.frameHeight,
+            this.frameWidth,
+            this.frameHeight,
+            // 좌우반전 위치 맞추기
+            this.isFlipped ? this.x - this.frameWidth : this.x,
+            this.y,
+            this.frameWidth * this.scale,
+            this.frameHeight * this.scale
+        );
     }
 }

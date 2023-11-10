@@ -79,7 +79,7 @@ class Menu{
     }
 
     // 캐릭터 테두리 그리기
-    createStroke(context, color, lineWidth, sizeWidth, sizeHeight, x, y){
+    createStroke(context, color, lineWidth, sizeWidth, sizeHeight, y){
         this.context.strokeStyle = color;  // 테두리 색상 설정
         this.context.lineWidth = lineWidth;       // 테두리 두께 설정
         const strokeWidth = sizeWidth;
@@ -94,6 +94,7 @@ class Menu{
         const character = gameConfig.characters[this.selectedChar];
         const x = this.menuX - character.frameWidth;
         const y = this.menuY - 250;
+        // 정확한 위치를 맞추기 위해 임의 수를 뺌
         character.changeX_Y(x - 15, y);
         character.draw();
     }
@@ -102,7 +103,7 @@ class Menu{
     start(){
         canvasProvider.clearCanvas();
         this.menuDraw();
-        this.createStroke(this.context, 'blue', 8, 180, 200, 180, 160);
+        this.createStroke(this.context, 'blue', 8, 180, 200, 160);
         this.characterDraw();
     }
 }

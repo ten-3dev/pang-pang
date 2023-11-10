@@ -21,10 +21,12 @@ class Game {
     }
 
     arrowLeft(){
+        this.character.isFlipped = true;
         this.character.moveDxl(-10);
     }
     
     arrowRight(){
+        this.character.isFlipped = false;
         this.character.moveDxr(10);
     }
 

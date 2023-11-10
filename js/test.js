@@ -1,17 +1,33 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
+// 이미지를 좌우로 반전하는 함수
+function flipImage(img) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.scale(-1, 1);
+    ctx.drawImage(img, -img.width, 0);
+    const flippedImg = new Image();
+    flippedImg.src = canvas.toDataURL();
+    return flippedImg;
+}
 
-var spriteImage = new Image();
-spriteImage.src = './assets/character/1/Idle.png'; // 스프라이트 이미지 파일 경로
+// 모든 리소스를 로드하기 위해서 처음 재귀로 모두 로드시킴
+function loadImages(index) {
+    if (index >= gameConfig.img_src.length) {
+        return;
+    }
 
-spriteImage.onload = function () {
-    // 이미지를 원래 크기로 그림
-    // ctx.drawImage(spriteImage, 0, 0);
+    const img = new Image();
+    img.src = gameConfig.img_src[index];
+    img.onload = () => {
+        // 모든 리소스 중 캐릭터 폴더에 있는 사진들은 곧바로 애니메이터 객체 생성
+        if(gameConfig.img_src[index].includes('character')) {
+            // 이미지를 좌우로 반전시킴
+            const flippedImg = flipImage(img);
+            gameConfig.characters.push(new CharacterAnimate(canvasProvider, flippedImg, 10, 4, 0, 0, 4));
+        }
+        loadImages(index + 1);
+    };
+}
 
-    // 이미지를 좌우로 반전하여 그림
-    ctx.scale(-1, 1); // X 방향으로 -1을 곱함 (좌우 반전)
-    ctx.drawImage(spriteImage, -spriteImage.width, 0);
-
-    // 다시 원래 크기로 복원
-    // ctx.scale(-1, 1); // 원래 크기로 돌려놓음
-};
+loadImages(0);
