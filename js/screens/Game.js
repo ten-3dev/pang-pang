@@ -1,5 +1,9 @@
-class Game {
-    constructor() {
+import { gameConfig } from "../global/Global.js";
+import { Ball } from "../utils/ImageDraw.js";
+
+export class Game {
+    constructor(canvasProvider) {
+        this.canvasProvider = canvasProvider;
         this.character = null;
         this.characterWalk = null;
         this.characterIdle = null;
@@ -8,13 +12,13 @@ class Game {
 
     init(){
         this.character = gameConfig.characters[gameConfig.characterIDX];
-        canvasProvider.clearCanvas();
+        this.canvasProvider.clearCanvas();
 
         // 첫 실행 시 초기 위치 설정
         if(!this.characterIdle || !this.characterWalk){
             // 초기 위치값 잡아주기
-            const characterInitX = ((canvasProvider.getCanvasElement().width) / 2) - this.character.frameWidth;
-            const characterInitY = canvasProvider.getCanvasElement().height - (this.character.frameHeight * this.character.scale);
+            const characterInitX = ((this.canvasProvider.getCanvasElement().width) / 2) - this.character.frameWidth;
+            const characterInitY = this.canvasProvider.getCanvasElement().height - (this.character.frameHeight * this.character.scale);
             this.character.changeX_Y(characterInitX, characterInitY);
 
             // idle 이미지 객체 저장
@@ -52,12 +56,12 @@ class Game {
 
     arrowLeft(){
         this.character.isFlipped = true;
-        this.character.moveDxl(-1);
+        this.character.moveDxl(-10);
     }
     
     arrowRight(){
         this.character.isFlipped = false;
-        this.character.moveDxr(1);
+        this.character.moveDxr(10);
     }
 
     stopX(){
@@ -77,7 +81,7 @@ class Game {
         this.character.draw();
 
         if(!this.ball){
-            this.ball = new Ball(canvasProvider, 450, 470, 100, 'assets/balls/ball1.png');
+            this.ball = new Ball(this.canvasProvider, 450, 470, 100, 'assets/balls/ball1.png');
         }
         this.ball.draw();
         console.log(this.detectCollision(this.ball.getHitBoxPosition(), this.character.getHitBoxPosition()));

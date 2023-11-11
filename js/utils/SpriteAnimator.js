@@ -1,59 +1,5 @@
-// Canvas 관련 기능 클래스
-class CanvasProvider {
-    constructor(elementId) {
-        this.canvasElement = document.getElementById(elementId);
-        this.context = this.canvasElement.getContext('2d');
-    }
-
-    getCanvasElement() {
-        return this.canvasElement;
-    }
-
-    getContext() {
-        return this.context;
-    }
-
-    clearCanvas() {
-        this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-    }
-}
-
-// Ball 관련 기능 클래스
-class Ball {
-    constructor(canvasProvider, x, y, radius, imageSrc) {
-        this.canvasElement = canvasProvider.getCanvasElement();
-        this.context = canvasProvider.getContext();
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.image = new Image();
-        this.image.src = imageSrc;
-    }
-
-    // hitBox 의 크기를 보내줌
-    getHitBoxPosition() {
-        const x = this.x;
-        const y = this.y;
-        const radius = this.radius;
-        
-        this.context.strokeStyle = 'blue';
-        this.context.strokeRect(x, y, radius * 2, radius * 2);
-        return {
-            x: this.x + this.radius,
-            y: this.y + this.radius,
-            radius: this.radius
-        }
-    }
-    
-
-    draw() {
-        this.context.drawImage(this.image, this.x, this.y, this.radius * 2, this.radius * 2);
-    }
-}
-
-
 // 스프라이트 관련 기능 클래스
-class SpriteAnimator {
+export class SpriteAnimator {
     constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
         this.canvasElement = canvasProvider.getCanvasElement();
         this.context = canvasProvider.getContext();
@@ -144,7 +90,7 @@ class SpriteAnimator {
     }
 }
 
-class CharacterAnimate extends SpriteAnimator {
+export class CharacterAnimate extends SpriteAnimator {
     constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
         super(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale);
         this.isFlipped = false; // 이미지가 좌우로 반전여부

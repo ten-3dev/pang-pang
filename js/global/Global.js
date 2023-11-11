@@ -37,3 +37,7 @@ const initGameConfig = {
 }
 
 let gameConfig = {...initGameConfig};
+
+export {
+    gameConfig
+};

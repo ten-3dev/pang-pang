@@ -1,4 +1,7 @@
-function listener(menu, game, pause){
+import { gameConfig } from "../global/Global.js";
+
+export const listener = (menu, game, pause) => {
+    // keyDown
     document.addEventListener('keydown', e => {
         switch(e.key){
             case 'ArrowUp':
@@ -40,21 +43,20 @@ function listener(menu, game, pause){
                 break;
         }
     });
+
+    // keyUp
+    document.addEventListener("keyup", e => {
+        switch(e.key){
+            case 'ArrowLeft':
+                if(gameConfig.state === 'game'){
+                    game.stopX();
+                }
+                break;
+            case 'ArrowRight':
+                if(gameConfig.state === 'game'){
+                    game.stopX();
+                }
+                break;
+        }
+    });
 }
-
-
-
-document.addEventListener("keyup", function (event) {
-    switch(event.key){
-        case 'ArrowLeft':
-            if(gameConfig.state === 'game'){
-                game.stopX();
-            }
-            break;
-        case 'ArrowRight':
-            if(gameConfig.state === 'game'){
-                game.stopX();
-            }
-            break;
-    }
-});

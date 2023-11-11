@@ -1,6 +1,13 @@
+import { gameConfig } from "./global/Global.js";    // 전역(공유변수)
+import { CanvasProvider } from "./utils/Provider.js";
+import { CharacterAnimate } from "./utils/SpriteAnimator.js";
+import { Menu } from "./screens/Menu.js";
+import { Game } from "./screens/Game.js";
+import { listener } from './listeners/Listeners.js';
+
 const canvasProvider = new CanvasProvider('canvas');
-const menu = new Menu();
-const game = new Game();
+const menu = new Menu(canvasProvider);
+const game = new Game(canvasProvider);
 
 
 // 모든 리소스를 로드하기 위해서 처음 재귀로 모두 로드시킴

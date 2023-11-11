@@ -1,5 +1,8 @@
-class Menu{
-    constructor(){
+import { gameConfig } from "../global/Global.js";
+
+export class Menu{
+    constructor(canvasProvider){
+        this.canvasProvider = canvasProvider;
         this.canvas = canvasProvider.getCanvasElement();
         this.context = canvasProvider.getContext();
         this.menuItems = ["Start Game", "Exit"];
@@ -48,7 +51,7 @@ class Menu{
             case 0:
                 // Start Game
                 console.log("Start Game selected");
-                canvasProvider.clearCanvas();
+                this.canvasProvider.clearCanvas();
                 gameConfig.characterIDX = this.selectedChar;
                 // 게임으로 전환
                 gameConfig.changeGame();
@@ -100,7 +103,7 @@ class Menu{
 
     // 시작
     start(){
-        canvasProvider.clearCanvas();
+        this.canvasProvider.clearCanvas();
         this.menuDraw();
         this.createStroke(this.context, 'blue', 8, 180, 200, 160);
         this.characterDraw();
