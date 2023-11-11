@@ -29,24 +29,35 @@ class Game {
 
     // 충돌 감지 메서드
     // 원과 사각형의 충돌 감지
-    detectCollision(circle, rect) {
-        const circleX = circle.x;
-        const circleY = circle.y;
-        const circleRadius = circle.radius;
-        const rectX = rect.x;
-        const rectY = rect.y;
-        const rectWidth = rect.width;
-        const rectHeight = rect.height;
+    detectCollision(circle, square) {
+        // 원과 사격형의 거리를 절댓값으로 구함
+        let distX = Math.abs(circle.x - square.x - square.width / 2);
+        let distY = Math.abs(circle.y - square.y - square.height / 2);
+            
+        // 서로의 거리가 원의 반지름 + 사각형의 반폭 또는 반높이보다 그면 충돌이 없음
+        if (distX > square.width / 2 + circle.radius || distY > square.height / 2 + circle.radius) {
+          return false;
+        }
+    
+        // 서로의 거리가 원의 반지름 + 사각형의 반폭 또는 반높이보다 작으면 충돌이 있음
+        if (distX <= square.width / 2 || distY <= square.height / 2) {
+          return true;
+        }
+    
+        // 코너(둥근) 부분을 계산하기 위해 대각선을 구해서 계산
+        let cornerDistance = Math.pow(distX - square.width / 2, 2) + Math.pow(distY - square.height / 2, 2);
+    
+        return cornerDistance <= Math.pow(circle.radius, 2);
     }
 
     arrowLeft(){
         this.character.isFlipped = true;
-        this.character.moveDxl(-10);
+        this.character.moveDxl(-1);
     }
     
     arrowRight(){
         this.character.isFlipped = false;
-        this.character.moveDxr(10);
+        this.character.moveDxr(1);
     }
 
     stopX(){
@@ -66,7 +77,7 @@ class Game {
         this.character.draw();
 
         if(!this.ball){
-            this.ball = new Ball(canvasProvider, 450, 600, 100, 'assets/balls/ball1.png');
+            this.ball = new Ball(canvasProvider, 450, 470, 100, 'assets/balls/ball1.png');
         }
         this.ball.draw();
         console.log(this.detectCollision(this.ball.getHitBoxPosition(), this.character.getHitBoxPosition()));

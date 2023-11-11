@@ -26,27 +26,28 @@ class Ball {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.dx = this.speed;
-        this.dy = this.speed;
         this.image = new Image();
         this.image.src = imageSrc;
     }
 
     // hitBox 의 크기를 보내줌
     getHitBoxPosition() {
-        // this.context.strokeStyle = 'blue';
-        // this.context.strokeRect(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
+        const x = this.x;
+        const y = this.y;
+        const radius = this.radius;
+        
+        this.context.strokeStyle = 'blue';
+        this.context.strokeRect(x, y, radius * 2, radius * 2);
         return {
-            x: this.x - this.radius,
-            y: this.y - this.radius,
+            x: this.x + this.radius,
+            y: this.y + this.radius,
             radius: this.radius
         }
     }
-
     
 
     draw() {
-        this.context.drawImage(this.image, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
+        this.context.drawImage(this.image, this.x, this.y, this.radius * 2, this.radius * 2);
     }
 }
 
@@ -184,9 +185,9 @@ class CharacterAnimate extends SpriteAnimator {
     // Flipped 을 하게 되면 위치가 조금씩 틀리기 때문에 삼항연산자 사용
     // 캐릭터마다 가지고 있는 크기(투명 제외)가 다르기 때문에 따로 숫자를 넣어서 사용 (추후 객체로 만들어 사용하기 쉽게 만들 예정)
     getHitBoxPosition() {
-        const correctionX = this.isFlipped ? 50 : 25;
-        const correctionY = this.isFlipped ? 45 : 45;
-        const correctionWidth = this.isFlipped ? -125 : -125;
+        const correctionX = this.isFlipped ? 60 : 45;
+        const correctionY = this.isFlipped ? 55 : 55;
+        const correctionWidth = this.isFlipped ? -145 : -145;
 
         const result = {
             x: this.x + correctionX,
