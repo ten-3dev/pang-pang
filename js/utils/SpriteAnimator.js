@@ -20,20 +20,6 @@ export class SpriteAnimator {
         this.frameInterval = 1000 / this.framesPerSecond;
     }
 
-    // hitBox 의 크기를 보내줌
-    getHitBoxPosition() {
-        const result = {
-            x: this.x,
-            y: this.y,
-            width: this.frameWidth * this.scale,
-            height: this.frameHeight * this.scale,
-        }
-
-        // this.context.strokeStyle = 'red';
-        // this.context.strokeRect(result.x, result.y, result.width, result.height);
-        return result;
-    }
-
     // 스프라이트 변경 속도 조절 메서드
     shouldUpdateFrame(timestamp) {
         const elapsed = timestamp - this.lastTimestamp;
@@ -125,27 +111,6 @@ export class CharacterAnimate extends SpriteAnimator {
             this.dxl = 0; // 왼쪽 벽에 닿으면 이동을 멈춤
             this.dxr = 0; // 오른쪽쪽 벽에 닿으면 이동을 멈춤
         }
-    }
-
-    // hitBox 의 크기를 보내줌
-    // Flipped 을 하게 되면 위치가 조금씩 틀리기 때문에 삼항연산자 사용
-    // 캐릭터마다 가지고 있는 크기(투명 제외)가 다르기 때문에 따로 숫자를 넣어서 사용 (추후 객체로 만들어 사용하기 쉽게 만들 예정)
-    getHitBoxPosition() {
-        const correctionX = this.isFlipped ? 60 : 45;
-        const correctionY = this.isFlipped ? 55 : 55;
-        const correctionWidth = this.isFlipped ? -145 : -145;
-
-        const result = {
-            x: this.x + correctionX,
-            y: this.y + correctionY,
-            width: this.frameWidth * this.scale + correctionWidth,
-            height: this.frameHeight * this.scale,
-        }
-
-        this.context.strokeStyle = 'red';
-        this.context.strokeRect(result.x, result.y, result.width, result.height);
-
-        return result;
     }
 
     // 재정의

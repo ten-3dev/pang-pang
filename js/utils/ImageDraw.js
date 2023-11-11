@@ -23,22 +23,6 @@ export class Ball extends ImageDraw {
         super(canvasProvider, x, y, 0, 0, imageSrc);
         this.radius = radius;
     }
-
-    // hitBox 의 크기를 보내줌
-    getHitBoxPosition() {
-        const x = this.x;
-        const y = this.y;
-        const radius = this.radius;
-        
-        this.context.strokeStyle = 'blue';
-        this.context.strokeRect(x, y, radius * 2, radius * 2);
-        
-        return {
-            x: this.x + this.radius,
-            y: this.y + this.radius,
-            radius: this.radius
-        }
-    }
     
     // 재정의
     draw() {

@@ -1,5 +1,6 @@
 import { gameConfig } from "../global/Global.js";
 import { Ball } from "../utils/ImageDraw.js";
+import { HitBoxProvider } from "../utils/Provider.js";
 
 export class Game {
     constructor(canvasProvider) {
@@ -31,29 +32,6 @@ export class Game {
         }
     }
 
-    // 충돌 감지 메서드
-    // 원과 사각형의 충돌 감지
-    detectCollision(circle, square) {
-        // 원과 사격형의 거리를 절댓값으로 구함
-        let distX = Math.abs(circle.x - square.x - square.width / 2);
-        let distY = Math.abs(circle.y - square.y - square.height / 2);
-            
-        // 서로의 거리가 원의 반지름 + 사각형의 반폭 또는 반높이보다 그면 충돌이 없음
-        if (distX > square.width / 2 + circle.radius || distY > square.height / 2 + circle.radius) {
-          return false;
-        }
-    
-        // 서로의 거리가 원의 반지름 + 사각형의 반폭 또는 반높이보다 작으면 충돌이 있음
-        if (distX <= square.width / 2 || distY <= square.height / 2) {
-          return true;
-        }
-    
-        // 코너(둥근) 부분을 계산하기 위해 대각선을 구해서 계산
-        let cornerDistance = Math.pow(distX - square.width / 2, 2) + Math.pow(distY - square.height / 2, 2);
-    
-        return cornerDistance <= Math.pow(circle.radius, 2);
-    }
-
     arrowLeft(){
         this.character.isFlipped = true;
         this.character.moveDxl(-10);
@@ -71,6 +49,8 @@ export class Game {
 
     start(){
         this.init();
+
+        // 움직임을 체크 후 Idle, Walk 이미지 변경
         if(this.character.dxr != 0 || this.character.dxl != 0){
             this.character.changeNumColumns(6);
             this.character.changeImage(this.characterWalk);
@@ -78,12 +58,20 @@ export class Game {
             this.character.changeNumColumns(4);
             this.character.changeImage(this.characterIdle); 
         }
-        this.character.draw();
 
+        // 볼이 없으면 생성
         if(!this.ball){
             this.ball = new Ball(this.canvasProvider, 450, 470, 100, 'assets/balls/ball1.png');
         }
+
+
+        this.character.draw();
         this.ball.draw();
-        console.log(this.detectCollision(this.ball.getHitBoxPosition(), this.character.getHitBoxPosition()));
+
+        // 충돌 감지
+        const circle = HitBoxProvider.getHitBoxCirclePosition(this.ball);
+        const square = HitBoxProvider.getHitBoxCharacterPosition(this.character);
+
+        console.log(HitBoxProvider.detectCollision(circle, square));
     }
 }
