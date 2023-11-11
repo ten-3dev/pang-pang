@@ -34,12 +34,12 @@ export class Game {
 
     arrowLeft(){
         this.character.isFlipped = true;
-        this.character.moveDxl(-10);
+        this.character.moveDxl(-8);
     }
     
     arrowRight(){
         this.character.isFlipped = false;
-        this.character.moveDxr(10);
+        this.character.moveDxr(8);
     }
 
     stopX(){
@@ -61,7 +61,7 @@ export class Game {
 
         // 볼이 없으면 생성
         if(!this.ball){
-            this.ball = new Ball(this.canvasProvider, 450, 470, 100, 'assets/balls/ball1.png');
+            this.ball = new Ball(this.canvasProvider, 10, 100, 100, 'assets/balls/ball1.png');
         }
 
 
@@ -72,6 +72,6 @@ export class Game {
         const circle = HitBoxProvider.getHitBoxCirclePosition(this.ball);
         const square = HitBoxProvider.getHitBoxCharacterPosition(this.character);
 
-        console.log(HitBoxProvider.detectCollision(circle, square));
+        // console.log(HitBoxProvider.detectCollision(circle, square));
     }
 }
