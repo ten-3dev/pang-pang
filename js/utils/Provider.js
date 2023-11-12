@@ -18,6 +18,7 @@ export class CanvasProvider {
     }
 }
 
+// HitBox 관련 기능 클래스
 export class HitBoxProvider{
     static getHitBoxCirclePosition(circle){
         const x = circle.x;

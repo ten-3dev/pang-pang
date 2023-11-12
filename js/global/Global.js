@@ -2,7 +2,7 @@ import { CharacterAnimate } from "../utils/SpriteAnimator.js";
 
 // 게임 시작 및 모든 전역 변수들의 객체
 const initGameConfig = {
-    // 게임 내에 모든 이미지 주소 리스트
+    // 첫 화면에 표시해야하는 이미지 주소 리스트
     img_src: [
         './assets/characters/1/Idle.png',
         './assets/characters/2/Idle.png',
@@ -37,7 +37,7 @@ const initGameConfig = {
         this.state = this.state_type[2]
     },
 
-    // 모든 리소스를 로드하기 위해서 처음 재귀로 모두 로드시킴
+    // 리소스를 로드하기 위해서 처음 재귀로 모두 로드시킴
     loadImages(index, canvasProvider) {
         if (index >= this.img_src.length) {
             return;
@@ -46,13 +46,13 @@ const initGameConfig = {
         const img = new Image();
         img.src = this.img_src[index];
         img.onload = () => {
-            // 모든 리소스 중 캐릭터 폴더에 있는 사진들은 곧바로 애니메이터 객체 생성
+            // 리소스 중 캐릭터 폴더에 있는 사진들은 곧바로 애니메이터 객체 생성
             if(this.img_src[index].includes('characters')){
                 this.characters.push(new CharacterAnimate(canvasProvider, img, 10, 4, 0, 0, 4));
             }
             this.loadImages(index + 1, canvasProvider);
         };
-    }
+    },
 }
 
 let gameConfig = {...initGameConfig};

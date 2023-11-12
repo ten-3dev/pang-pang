@@ -26,6 +26,7 @@ export class Ball extends ImageDraw {
         this.gravity = 0.5;
         this.dropSpeed = 0;
         this.moveSize = 5;
+        this.playingBall = false; // 볼이 파이프에 나왔는지 여부
     }
 
     // 공의 상태를 업데이트

@@ -8,9 +8,10 @@ export class Game {
         this.character = null;
         this.characterWalk = null;
         this.characterIdle = null;
-        this.ball = null;
+        this.ballArr = [];
         this.pipeImage = null;
-        this.isBallOutOfPipe = false;
+        this.timerCount = 5;   // 초기 카운트 카운트
+        this.timer = setInterval(() => {this.timerCount--}, 1000); // 1초 마다 인터벌
     }
 
     init(){
@@ -69,17 +70,26 @@ export class Game {
     }
 
     ballDraw(){
-        if(!this.ball){
-            this.ball = new Ball(this.canvasProvider, 0, 50, 100, 'assets/balls/ball1.png');
+        // 타이머 (0초가 되면 볼 추가)
+        if(this.timerCount <= 0){
+            // 랜덤으로 볼의 이미지를 결정 후 push
+            const src = `assets/balls/ball${parseInt(Math.random() * 7 + 1)}.png`;
+            this.ballArr.push(new Ball(this.canvasProvider, 0, 50, 100, src));
+
+            // 두 번째부터는 20초 뒤에 볼이 추가됨
+            this.timerCount = 20;
         }
 
-        this.ball.draw();
+        // 여러개의 볼을 그리기 및 업데이트
+        for(let ball of this.ballArr){
+            ball.draw();
 
-        if(this.ball.x <= 100 && !this.isBallOutOfPipe){
-            this.ball.moveX(1);
-        }else{
-            this.isBallOutOfPipe = true;
-            this.ball.update();
+            if(ball.x <= 100 && !ball.playingBall){
+                ball.moveX(1);
+            }else{
+                ball.playingBall = true;
+                ball.update();
+            }
         }
     }
 
