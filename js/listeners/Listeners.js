@@ -41,6 +41,11 @@ export const listener = (menu, game, pause) => {
                     menu.enter();
                 }
                 break;
+            case ' ':   // space
+                if(gameConfig.state === 'game'){
+                    game.weaponAttack();
+                }
+                break;
         }
     });
 
@@ -55,6 +60,11 @@ export const listener = (menu, game, pause) => {
             case 'ArrowRight':
                 if(gameConfig.state === 'game'){
                     game.stopX();
+                }
+                break;
+            case ' ':   // space
+                if(gameConfig.state === 'game'){
+                    game.weaponStop();
                 }
                 break;
         }

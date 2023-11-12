@@ -62,3 +62,60 @@ export class Ball extends ImageDraw {
         this.context.drawImage(this.image, this.x, this.y, this.radius * 2, this.radius * 2);
     }
 }
+
+// 이미지 표시 관련 클래스
+export class Weapon extends ImageDraw{
+    constructor(canvasProvider, imageSrc) {
+        super(canvasProvider, 0, 0, 0, 0, imageSrc);
+        this.width = 30;
+        this.height = 3000;
+        this.y = canvasProvider.getCanvasElement().height;
+        this.isAttack = false;
+        this.onTimer = false;
+        this.timer = null;
+        this.warning = null;
+        this.blink = null;
+        this.isVisible = true;
+    }
+
+    stop(){
+        this.isAttack = false;
+        this.onTimer = false;
+        this.isVisible = true;
+        this.y = this.canvasElement.height;
+        clearTimeout(this.timer);
+        clearTimeout(this.warning);
+        clearInterval(this.blink);
+    }
+
+    moveX(x){
+        this.x = x;
+    }
+
+    draw() {
+        // 공격
+        if(this.y > 0 && this.isAttack){
+            this.y -= 15;
+        }
+
+        // 위로 끝까지 갔는데도 3초동안 공격 취소를 하지 않으면 강제 취소
+        if(this.y < 0 && this.isAttack && !this.onTimer){
+            // 경고 timeOut
+            this.warning = setTimeout(() => {
+                this.blink = setInterval(() => {
+                    this.isVisible = !this.isVisible;
+                }, 100);
+            }, 500);
+
+            // 무기 제거 timeOut
+            this.timer = setTimeout(() => {
+                this.stop();
+            }, 2000);
+            this.onTimer = true;
+        }
+
+        if(this.isVisible){
+            this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
+        }
+    }
+}

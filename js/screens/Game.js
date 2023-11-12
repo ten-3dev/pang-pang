@@ -1,5 +1,5 @@
 import { gameConfig } from "../global/Global.js";
-import { Ball, ImageDraw } from "../utils/ImageDraw.js";
+import { Ball, ImageDraw, Weapon } from "../utils/ImageDraw.js";
 import { HitBoxProvider, TextDrawerProvider } from "../utils/Provider.js";
 
 export class Game {
@@ -10,9 +10,10 @@ export class Game {
         this.characterIdle = null;
         this.ballArr = [];
         this.pipeImage = null;
-        this.timerCount = 5;   // 초기 카운트 카운트
+        this.timerCount = 5;   // 초기 볼 카운트 카운트
         this.timer = null;
         this.textDrawerProvider = new TextDrawerProvider(this.canvasProvider);
+        this.weapon = null;
     }
 
     init(){
@@ -38,6 +39,9 @@ export class Game {
             this.timer = setInterval(() => {
                 this.timerCount--;
             }, 1000);
+
+            // weapon 설정
+            this.weapon = new Weapon(this.canvasProvider, 'assets/weapons/weapon1.png');
         }
     }
 
@@ -114,6 +118,19 @@ export class Game {
         this.textDrawerProvider.drawText(`counter: ${this.timerCount}`, x, y);
     }
 
+    // 무기 공격
+    weaponAttack(){
+        // 무기를 캐릭터의 중앙 위치로 이동
+        if(!this.weapon.isAttack){
+            this.weapon.moveX(this.character.x + (this.character.frameWidth / 2) + 30);
+        }
+        this.weapon.isAttack = true;
+    }
+
+    weaponStop(){
+        this.weapon.stop();
+    }
+
     start(){
         this.init();
         this.changeCharacterImage();
@@ -121,6 +138,7 @@ export class Game {
         this.counterDraw();
         this.ballDraw();
         this.pipeDraw();
+        this.weapon.draw();
 
         // // 충돌 감지
         // const circle = HitBoxProvider.getHitBoxCirclePosition(this.ball);
