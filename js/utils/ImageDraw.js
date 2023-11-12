@@ -43,15 +43,21 @@ export class Ball extends ImageDraw {
 
         // 바닥에 닿으면 튕기도록 처리
         if (this.y + this.radius * 2 >= this.canvasElement.height) {
-            console.log(this.dropSpeed);
             this.dropSpeed *= -1; // 일정 비율로 튕기도록 처리
             this.dropSpeed += -this.gravity; // 점점 떨어지지 않도록 설정
         }
     }
 
+    moveX(speed){
+        this.x += speed;
+    }
+
+    changeY(y){
+        this.y = y;
+    }
+
     // 재정의
     draw() {
-        this.update();
         this.context.drawImage(this.image, this.x, this.y, this.radius * 2, this.radius * 2);
     }
 }

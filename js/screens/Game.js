@@ -1,5 +1,5 @@
 import { gameConfig } from "../global/Global.js";
-import { Ball } from "../utils/ImageDraw.js";
+import { Ball, ImageDraw } from "../utils/ImageDraw.js";
 import { HitBoxProvider } from "../utils/Provider.js";
 
 export class Game {
@@ -9,6 +9,8 @@ export class Game {
         this.characterWalk = null;
         this.characterIdle = null;
         this.ball = null;
+        this.pipeImage = null;
+        this.isBallOutOfPipe = false;
     }
 
     init(){
@@ -47,10 +49,8 @@ export class Game {
         this.character.moveDxl(0);
     }
 
-    start(){
-        this.init();
-
-        // 움직임을 체크 후 Idle, Walk 이미지 변경
+    // 움직임을 체크 후 Idle, Walk 이미지 변경
+    changeCharacterImage(){
         if(this.character.dxr != 0 || this.character.dxl != 0){
             this.character.changeNumColumns(6);
             this.character.changeImage(this.characterWalk);
@@ -58,19 +58,41 @@ export class Game {
             this.character.changeNumColumns(4);
             this.character.changeImage(this.characterIdle); 
         }
+    }
 
-        // 볼이 없으면 생성
-        if(!this.ball){
-            this.ball = new Ball(this.canvasProvider, 10, 100, 100, 'assets/balls/ball1.png');
+    pipeDraw(){
+        if(!this.pipeImage){
+            this.pipeImage = new ImageDraw(this.canvasProvider, 0, 50, 100, 200, '/assets/objects/pipe.png');
         }
 
+        this.pipeImage.draw();
+    }
 
-        this.character.draw();
+    ballDraw(){
+        if(!this.ball){
+            this.ball = new Ball(this.canvasProvider, 0, 50, 100, 'assets/balls/ball1.png');
+        }
+
         this.ball.draw();
 
-        // 충돌 감지
-        const circle = HitBoxProvider.getHitBoxCirclePosition(this.ball);
-        const square = HitBoxProvider.getHitBoxCharacterPosition(this.character);
+        if(this.ball.x <= 100 && !this.isBallOutOfPipe){
+            this.ball.moveX(1);
+        }else{
+            this.isBallOutOfPipe = true;
+            this.ball.update();
+        }
+    }
+
+    start(){
+        this.init();
+        this.changeCharacterImage();
+        this.character.draw();
+        this.ballDraw();
+        this.pipeDraw();
+
+        // // 충돌 감지
+        // const circle = HitBoxProvider.getHitBoxCirclePosition(this.ball);
+        // const square = HitBoxProvider.getHitBoxCharacterPosition(this.character);
 
         // console.log(HitBoxProvider.detectCollision(circle, square));
     }

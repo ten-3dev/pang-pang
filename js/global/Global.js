@@ -4,15 +4,15 @@ import { CharacterAnimate } from "../utils/SpriteAnimator.js";
 const initGameConfig = {
     // 게임 내에 모든 이미지 주소 리스트
     img_src: [
-        './assets/character/1/Idle.png',
-        './assets/character/2/Idle.png',
-        './assets/character/3/Idle.png',
-        './assets/character/4/Idle.png',
-        './assets/character/5/Idle.png',
-        './assets/character/6/Idle.png',
-        './assets/character/7/Idle.png',
-        './assets/character/8/Idle.png',
-        './assets/character/9/Idle.png',
+        './assets/characters/1/Idle.png',
+        './assets/characters/2/Idle.png',
+        './assets/characters/3/Idle.png',
+        './assets/characters/4/Idle.png',
+        './assets/characters/5/Idle.png',
+        './assets/characters/6/Idle.png',
+        './assets/characters/7/Idle.png',
+        './assets/characters/8/Idle.png',
+        './assets/characters/9/Idle.png',
     ],
 
     // 모든 캐릭터 객체를 담는 곳
@@ -47,7 +47,7 @@ const initGameConfig = {
         img.src = this.img_src[index];
         img.onload = () => {
             // 모든 리소스 중 캐릭터 폴더에 있는 사진들은 곧바로 애니메이터 객체 생성
-            if(this.img_src[index].includes('character')){
+            if(this.img_src[index].includes('characters')){
                 this.characters.push(new CharacterAnimate(canvasProvider, img, 10, 4, 0, 0, 4));
             }
             this.loadImages(index + 1, canvasProvider);
