@@ -1,6 +1,6 @@
 import { gameConfig } from "../global/Global.js";
 import { Ball, ImageDraw } from "../utils/ImageDraw.js";
-import { HitBoxProvider } from "../utils/Provider.js";
+import { HitBoxProvider, TextDrawerProvider } from "../utils/Provider.js";
 
 export class Game {
     constructor(canvasProvider) {
@@ -11,7 +11,8 @@ export class Game {
         this.ballArr = [];
         this.pipeImage = null;
         this.timerCount = 5;   // 초기 카운트 카운트
-        this.timer = setInterval(() => {this.timerCount--}, 1000); // 1초 마다 인터벌
+        this.timer = null;
+        this.textDrawerProvider = new TextDrawerProvider(this.canvasProvider);
     }
 
     init(){
@@ -32,6 +33,11 @@ export class Game {
             const img = new Image();
             img.src = gameConfig.characters[gameConfig.characterIDX].spriteImage.src.replace('Idle', 'Walk');
             this.characterWalk = img;
+
+            // 1초 마다 timerCount 를 줄여줌
+            this.timer = setInterval(() => {
+                this.timerCount--;
+            }, 1000);
         }
     }
 
@@ -93,10 +99,26 @@ export class Game {
         }
     }
 
+    counterDraw(){
+        this.textDrawerProvider.setFont("40px sans-serif");
+        if(this.timerCount <= 5){
+            this.textDrawerProvider.setColor("red");
+        }else{
+            this.textDrawerProvider.setColor("pink");
+        }
+
+        // 오른쪽 밑 가장자리로 위치 설정
+        const x = this.canvasProvider.getCanvasElement().width - 120;
+        const y = this.canvasProvider.getCanvasElement().height - 30;
+
+        this.textDrawerProvider.drawText(`counter: ${this.timerCount}`, x, y);
+    }
+
     start(){
         this.init();
         this.changeCharacterImage();
         this.character.draw();
+        this.counterDraw();
         this.ballDraw();
         this.pipeDraw();
 

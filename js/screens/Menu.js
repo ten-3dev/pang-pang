@@ -1,4 +1,5 @@
 import { gameConfig } from "../global/Global.js";
+import { TextDrawerProvider } from "../utils/Provider.js";
 
 export class Menu{
     constructor(canvasProvider){
@@ -11,14 +12,14 @@ export class Menu{
         this.itemSpacing = 40;
         this.menuX = this.canvas.width / 2;
         this.menuY = this.canvas.height / 2;
-        this.menuFont = "30px sans-serif";
+        this.textDrawerProvider = null;
         this.init();
     }
 
     // 초기설정
     init(){
-        this.context.textAlign = "center";
-        this.context.font = this.menuFont;
+        this.textDrawerProvider = new TextDrawerProvider(this.canvasProvider);
+        this.textDrawerProvider.setFont("30px sans-serif");
     }
 
     // 조작 함수
@@ -71,12 +72,12 @@ export class Menu{
             const y = this.menuY + i * this.itemSpacing;
 
             if (i === this.selectedItem) {
-                this.context.fillStyle = "blue";
+                this.textDrawerProvider.setColor("blue");
             } else {
-                this.context.fillStyle = "black";
+                this.textDrawerProvider.setColor("black");
             }
 
-            this.context.fillText(menuItem, x, y);
+            this.textDrawerProvider.drawText(menuItem, x, y);
         }
     }
 

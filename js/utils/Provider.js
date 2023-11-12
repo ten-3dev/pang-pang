@@ -80,3 +80,32 @@ export class HitBoxProvider{
         return cornerDistance <= Math.pow(circle.radius, 2);
     }
 }
+
+// 화면에 글씨를 그려주는 클래스
+export class TextDrawerProvider {
+    constructor(canvasProvider) {
+        this.context = canvasProvider.getContext();
+        this.font = "20px Arial";
+        this.color = '#000';
+        this.textAlign = 'center';
+    }
+
+    setFont(font){
+        this.font = font;
+    }
+
+    setColor(color){
+        this.color = color;
+    }
+
+    setTextAlign(textAlign){
+        this.textAlign = textAlign;
+    }
+
+    drawText(text, x, y) {
+        this.context.font = this.font;
+        this.context.fillStyle = this.color;
+        this.context.textAlign = this.textAlign;
+        this.context.fillText(text, x, y);
+    }
+}
