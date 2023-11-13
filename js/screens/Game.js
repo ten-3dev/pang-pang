@@ -141,9 +141,23 @@ export class Game {
         this.weapon.draw();
 
         // // 충돌 감지
-        // const circle = HitBoxProvider.getHitBoxCirclePosition(this.ball);
-        // const square = HitBoxProvider.getHitBoxCharacterPosition(this.character);
+        const square = HitBoxProvider.getHitBoxCharacterPosition(this.character);
+        const weapon = HitBoxProvider.getHitBoxWeaponPosition(this.weapon)
 
-        // console.log(HitBoxProvider.detectCollision(circle, square));
+        // 여러개의 볼과 충돌 감지
+        for(let ball of this.ballArr){
+            const circle = HitBoxProvider.getHitBoxCirclePosition(ball);
+
+            if(HitBoxProvider.detectCollision(circle, weapon)){
+                console.log("무기와 공이 닿음");
+                break;
+            }
+    
+            // 캐릭터와 볼이 닿았는지
+            if(HitBoxProvider.detectCollision(circle, square)){
+                console.log("공과 캐릭터에 닿음");
+                break;
+            }
+        }
     }
 }

@@ -37,6 +37,26 @@ export class HitBoxProvider{
         return result;
     }
 
+    static getHitBoxWeaponPosition(weapon){
+        const x = weapon.x;
+        const y = weapon.y;
+        const width = weapon.width;
+        const height = weapon.height;
+
+        const result = {
+            x: x,
+            y: y,
+            width: width,
+            height: height
+        };
+        
+        weapon.context.strokeStyle = 'blue';
+        weapon.context.strokeRect(result.x, result.y, result.width, result.height);
+
+
+        return result;
+    }
+
     // hitBox 의 크기를 보내줌
     // Flipped 을 하게 되면 위치가 조금씩 틀리기 때문에 삼항연산자 사용
     // 캐릭터마다 가지고 있는 크기(투명 제외)가 다르기 때문에 따로 숫자를 넣어서 사용 (추후 객체로 만들어 사용하기 쉽게 만들 예정)

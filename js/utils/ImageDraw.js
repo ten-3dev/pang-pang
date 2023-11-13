@@ -99,7 +99,8 @@ export class Weapon extends ImageDraw{
         this.isAttack = false;
         this.onTimer = false;
         this.isVisible = true;
-        this.y = this.canvasElement.height;
+        // 공격하지 않았는데도 공과 닿을 수도 있기 때문에 더 밑으로 내림(+10)
+        this.y = this.canvasElement.height + 10;
         clearTimeout(this.timer);
         clearTimeout(this.warning);
         clearInterval(this.blink);
@@ -116,7 +117,7 @@ export class Weapon extends ImageDraw{
         }
 
         // 위로 끝까지 갔는데도 3초동안 공격 취소를 하지 않으면 강제 취소
-        if(this.y < 0 && this.isAttack && !this.onTimer){
+        if(this.isAttack && !this.onTimer){
             // 경고 timeOut
             this.warning = setTimeout(() => {
                 this.blink = setInterval(() => {
