@@ -86,7 +86,9 @@ export class Weapon extends ImageDraw{
         super(canvasProvider, 0, 0, 0, 0, imageSrc);
         this.width = 30;
         this.height = 3000;
-        this.y = canvasProvider.getCanvasElement().height;
+        // height 그대로 주면 무기를 쓰지 않아도 hitBox는 살짝 나와있기 때문에 
+        // 공과 닿으면 충돌 감지가 되기 때문에 더 밑으로 내려줌 
+        this.y = canvasProvider.getCanvasElement().height + 20;
         this.isAttack = false;
         this.onTimer = false;
         this.timer = null;
@@ -99,8 +101,7 @@ export class Weapon extends ImageDraw{
         this.isAttack = false;
         this.onTimer = false;
         this.isVisible = true;
-        // 공격하지 않았는데도 공과 닿을 수도 있기 때문에 더 밑으로 내림(+10)
-        this.y = this.canvasElement.height + 10;
+        this.y = this.canvasElement.height + 20;
         clearTimeout(this.timer);
         clearTimeout(this.warning);
         clearInterval(this.blink);
@@ -123,7 +124,7 @@ export class Weapon extends ImageDraw{
                 this.blink = setInterval(() => {
                     this.isVisible = !this.isVisible;
                 }, 100);
-            }, 500);
+            }, 1500);
 
             // 무기 제거 timeOut
             this.timer = setTimeout(() => {
