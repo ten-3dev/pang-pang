@@ -27,6 +27,10 @@ export class Ball extends ImageDraw {
         this.dropSpeed = 0;
         this.moveSize = 5;
         this.playingBall = false; // 볼이 파이프에 나왔는지 여부
+        this.isInvincible = true; // 무적 여부
+        this.isInvincibleTimer = null;
+        this.blink = null;
+        this.blinkCnt = 0;
     }
 
     // 공의 상태를 업데이트
@@ -59,7 +63,20 @@ export class Ball extends ImageDraw {
 
     // 재정의
     draw() {
-        this.context.drawImage(this.image, this.x, this.y, this.radius * 2, this.radius * 2);
+        if(this.isInvincible){
+            this.context.drawImage(this.image, this.x, this.y, this.radius * 2, this.radius * 2);
+        }
+        if(this.x === 0 && !this.playingBall){ // 가장 처음에 실행후 잠시동안 무적
+            this.blink = setInterval(() => {
+                this.blinkCnt++;
+                this.isInvincible = !this.isInvincible;
+                if(this.blinkCnt === 20){
+                    this.blinkCnt = 0;
+                    this.isInvincible = true;
+                    clearInterval(this.blink);
+                }
+            }, 100);
+        }
     }
 }
 
