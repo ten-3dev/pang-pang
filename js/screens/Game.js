@@ -131,6 +131,40 @@ export class Game {
         this.weapon.stop();
     }
 
+    detectCollision(){
+        // // 충돌 감지
+        const square = HitBoxProvider.getHitBoxCharacterPosition(this.character);
+        const weapon = HitBoxProvider.getHitBoxWeaponPosition(this.weapon)
+
+        // 여러개의 볼과 충돌 감지
+        for(let ball of this.ballArr){
+            const circle = HitBoxProvider.getHitBoxCirclePosition(ball);
+        
+            // 무기와 볼이 닿았는지
+            if(HitBoxProvider.detectCollision(circle, weapon)){
+                console.log("무기와 공이 닿음");
+                this.weapon.stop();
+            
+                const findBall = this.ballArr.find(e => e === ball);
+                const childBalls = findBall.createChildBall();
+
+                // 닿은 볼을 찾은 후 삭제
+                const balls = this.ballArr.filter(e => e != ball);
+                this.ballArr = balls;
+
+                // 무기에 3번 맞았으면 제거. 아니면 배열에 추가
+                childBalls.map(e => {
+                    if(e.hitCnt < 3) this.ballArr.push(e);
+                })
+            }
+        
+            // 캐릭터와 볼이 닿았는지
+            if(HitBoxProvider.detectCollision(circle, square)){
+                console.log("공과 캐릭터에 닿음");
+            }
+        }
+    }
+
     start(){
         this.init();
         this.changeCharacterImage();
@@ -139,25 +173,6 @@ export class Game {
         this.ballDraw();
         this.pipeDraw();
         this.weapon.draw();
-
-        // // 충돌 감지
-        const square = HitBoxProvider.getHitBoxCharacterPosition(this.character);
-        const weapon = HitBoxProvider.getHitBoxWeaponPosition(this.weapon)
-
-        // 여러개의 볼과 충돌 감지
-        for(let ball of this.ballArr){
-            const circle = HitBoxProvider.getHitBoxCirclePosition(ball);
-
-            if(HitBoxProvider.detectCollision(circle, weapon)){
-                console.log("무기와 공이 닿음");
-                break;
-            }
-    
-            // 캐릭터와 볼이 닿았는지
-            if(HitBoxProvider.detectCollision(circle, square)){
-                console.log("공과 캐릭터에 닿음");
-                break;
-            }
-        }
+        this.detectCollision();
     }
 }

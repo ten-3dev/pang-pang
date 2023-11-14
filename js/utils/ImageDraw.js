@@ -1,8 +1,9 @@
 // 이미지 표시 관련 클래스
 export class ImageDraw {
     constructor(canvasProvider, x, y, width, height, imageSrc) {
-        this.canvasElement = canvasProvider.getCanvasElement();
-        this.context = canvasProvider.getContext();
+        this.canvasProvider = canvasProvider;
+        this.canvasElement = this.canvasProvider.getCanvasElement();
+        this.context = this.canvasProvider.getContext();
         this.x = x;
         this.y = y;
         this.width = width;
@@ -31,6 +32,7 @@ export class Ball extends ImageDraw {
         this.isInvincibleTimer = null;
         this.blink = null;
         this.blinkCnt = 0;
+        this.hitCnt = 0;
     }
 
     // 공의 상태를 업데이트
@@ -61,6 +63,23 @@ export class Ball extends ImageDraw {
         this.y = y;
     }
 
+    // 무기와 닿으면 자식 공 생성 메서드
+    createChildBall(){
+        // 오른쪽 공 생성
+        const leftBall = new Ball(this.canvasProvider, this.x, this.y, this.radius / 1.4, this.image.src);
+        const rightBall = new Ball(this.canvasProvider, this.x, this.y, this.radius / 1.4, this.image.src);
+
+        // 맞은 횟수 측정
+        leftBall.hitCnt = this.hitCnt + 1;
+        rightBall.hitCnt = this.hitCnt + 1;
+
+        // 왼쪽 공은 왼쪽으로 오른쪽 공은 오른쪽으로 설정
+        leftBall.moveSize = -5;
+        rightBall.moveSize = 5;
+
+        return [leftBall, rightBall];
+    }
+
     // 재정의
     draw() {
         if(this.isInvincible){
@@ -70,6 +89,8 @@ export class Ball extends ImageDraw {
             this.blink = setInterval(() => {
                 this.blinkCnt++;
                 this.isInvincible = !this.isInvincible;
+                
+                // blinkCnt 가 20번 깜빡이면 종료
                 if(this.blinkCnt === 20){
                     this.blinkCnt = 0;
                     this.isInvincible = true;
@@ -88,7 +109,7 @@ export class Weapon extends ImageDraw{
         this.height = 3000;
         // height 그대로 주면 무기를 쓰지 않아도 hitBox는 살짝 나와있기 때문에 
         // 공과 닿으면 충돌 감지가 되기 때문에 더 밑으로 내려줌 
-        this.y = canvasProvider.getCanvasElement().height + 20;
+        this.y = this.canvasProvider.getCanvasElement().height + 20;
         this.isAttack = false;
         this.onTimer = false;
         this.timer = null;
