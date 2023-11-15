@@ -74,6 +74,10 @@ export class Ball extends ImageDraw {
         leftBall.hitCnt = this.hitCnt + 1;
         rightBall.hitCnt = this.hitCnt + 1;
 
+        // 자식볼은 무적을 비활성화
+        leftBall.playingBall = true;
+        rightBall.playingBall = true;
+
         // 왼쪽 공은 왼쪽으로 오른쪽 공은 오른쪽으로 설정
         leftBall.moveSize = -5;
         rightBall.moveSize = 5;
