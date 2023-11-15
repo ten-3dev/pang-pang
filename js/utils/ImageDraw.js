@@ -28,9 +28,10 @@ export class Ball extends ImageDraw {
         this.dropSpeed = 0;
         this.moveSize = 5;
         this.playingBall = false; // 볼이 파이프에 나왔는지 여부
-        this.isInvincible = true; // 무적 여부
+        this.isVisible = true; // 무적시 깜빡임 변수
+        this.isInvincible = false // 무적 여부
         this.isInvincibleTimer = null;
-        this.blink = null;
+        this.blinkInterval = null;
         this.blinkCnt = 0;
         this.hitCnt = 0;
     }
@@ -82,19 +83,21 @@ export class Ball extends ImageDraw {
 
     // 재정의
     draw() {
-        if(this.isInvincible){
+        if(this.isVisible){
             this.context.drawImage(this.image, this.x, this.y, this.radius * 2, this.radius * 2);
         }
         if(this.x === 0 && !this.playingBall){ // 가장 처음에 실행후 잠시동안 무적
-            this.blink = setInterval(() => {
+            this.isInvincible = true;
+            this.blinkInterval = setInterval(() => {
                 this.blinkCnt++;
-                this.isInvincible = !this.isInvincible;
+                this.isVisible = !this.isVisible;
                 
                 // blinkCnt 가 20번 깜빡이면 종료
                 if(this.blinkCnt === 20){
                     this.blinkCnt = 0;
-                    this.isInvincible = true;
-                    clearInterval(this.blink);
+                    this.isVisible = true;
+                    this.isInvincible = false;
+                    clearInterval(this.blinkInterval);
                 }
             }, 100);
         }
@@ -112,9 +115,9 @@ export class Weapon extends ImageDraw{
         this.y = this.canvasProvider.getCanvasElement().height + 20;
         this.isAttack = false;
         this.onTimer = false;
-        this.timer = null;
-        this.warning = null;
-        this.blink = null;
+        this.timerTimeout = null;
+        this.warningTimeout = null;
+        this.blinkInterval = null;
         this.isVisible = true;
     }
 
@@ -123,9 +126,9 @@ export class Weapon extends ImageDraw{
         this.onTimer = false;
         this.isVisible = true;
         this.y = this.canvasElement.height + 20;
-        clearTimeout(this.timer);
-        clearTimeout(this.warning);
-        clearInterval(this.blink);
+        clearTimeout(this.timerTimeout);
+        clearTimeout(this.warningTimeout);
+        clearInterval(this.blinkInterval);
     }
 
     moveX(x){
@@ -141,14 +144,14 @@ export class Weapon extends ImageDraw{
         // 위로 끝까지 갔는데도 3초동안 공격 취소를 하지 않으면 강제 취소
         if(this.isAttack && !this.onTimer){
             // 경고 timeOut
-            this.warning = setTimeout(() => {
-                this.blink = setInterval(() => {
+            this.warningTimeout = setTimeout(() => {
+                this.blinkInterval = setInterval(() => {
                     this.isVisible = !this.isVisible;
                 }, 100);
             }, 1500);
 
             // 무기 제거 timeOut
-            this.timer = setTimeout(() => {
+            this.timerTimeout = setTimeout(() => {
                 this.stop();
             }, 2000);
             this.onTimer = true;

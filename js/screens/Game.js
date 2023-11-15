@@ -144,6 +144,11 @@ export class Game {
             if(HitBoxProvider.detectCollision(circle, weapon)){
                 console.log("무기와 공이 닿음");
                 this.weapon.stop();
+
+                // 무적일땐 아무런 효과 없이 바로 리턴
+                if(ball.isInvincible){
+                    return;
+                }
             
                 const findBall = this.ballArr.find(e => e === ball);
                 const childBalls = findBall.createChildBall();
