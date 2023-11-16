@@ -1,5 +1,5 @@
 import { gameConfig } from "../global/Global.js";
-import { Ball, ImageDraw, Weapon } from "../utils/ImageDraw.js";
+import { Ball, ImageDraw, Weapon, Heart } from "../utils/ImageDraw.js";
 import { HitBoxProvider, TextDrawerProvider } from "../utils/Provider.js";
 
 export class Game {
@@ -13,6 +13,7 @@ export class Game {
         this.timerCount = 5;   // 초기 볼 카운트 카운트
         this.timer = null;
         this.textDrawerProvider = new TextDrawerProvider(this.canvasProvider);
+        this.hearts = new Heart(this.canvasProvider);
         this.weapon = null;
     }
 
@@ -112,8 +113,8 @@ export class Game {
         }
 
         // 오른쪽 밑 가장자리로 위치 설정
-        const x = this.canvasProvider.getCanvasElement().width - 120;
-        const y = this.canvasProvider.getCanvasElement().height - 30;
+        const x = gameConfig.getCounterX(this.canvasProvider);
+        const y = gameConfig.getCounterY(this.canvasProvider);
 
         this.textDrawerProvider.drawText(`counter: ${this.timerCount}`, x, y);
     }
@@ -166,6 +167,7 @@ export class Game {
             // 캐릭터와 볼이 닿았는지
             if(HitBoxProvider.detectCollision(circle, square)){
                 console.log("공과 캐릭터에 닿음");
+                this.hearts.hit();
             }
         }
     }
@@ -174,10 +176,14 @@ export class Game {
         this.init();
         this.changeCharacterImage();
         this.character.draw();
+
         this.counterDraw();
         this.ballDraw();
         this.pipeDraw();
+
         this.weapon.draw();
         this.detectCollision();
+
+        this.hearts.draw();
     }
 }

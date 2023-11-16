@@ -53,6 +53,20 @@ const initGameConfig = {
             this.loadImages(index + 1, canvasProvider);
         };
     },
+
+    // 카운터, 하트 위치
+    getCounterX(canvasProvider){
+        return canvasProvider.getCanvasElement().width - 120;
+    },
+    getCounterY(canvasProvider){
+        return canvasProvider.getCanvasElement().height - 30;
+    },
+    getHeartX(canvasProvider){
+        return canvasProvider.getCanvasElement().width - 60;
+    },
+    getHeartY(canvasProvider){
+        return canvasProvider.getCanvasElement().height - 120;
+    },
 }
 
 let gameConfig = {...initGameConfig};

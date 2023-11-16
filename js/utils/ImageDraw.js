@@ -1,3 +1,5 @@
+import { gameConfig } from "../global/Global.js";
+
 // 이미지 표시 관련 클래스
 export class ImageDraw {
     constructor(canvasProvider, x, y, width, height, imageSrc) {
@@ -162,6 +164,29 @@ export class Weapon extends ImageDraw{
         }
 
         if(this.isVisible){
+            this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
+        }
+    }
+}
+
+export class Heart extends ImageDraw{
+    constructor(canvasProvider) {
+        super(canvasProvider, 0, 0, 40, 40, 'assets/objects/heart.png');
+        this.heartArr = [];
+        this.heartNum = 5;  // 초기에 하트는 5개
+        this.hitNum = 0; // 닿인 수
+    }
+
+    // 캐릭터와 공이 닿였다면
+    hit(){
+        
+    }
+
+    draw(){
+        for(let i = 0; i < this.heartNum; i++){
+            this.x = gameConfig.getHeartX(this.canvasProvider) + (i * -50);
+            this.y = gameConfig.getHeartY(this.canvasProvider);
+    
             this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
         }
     }
