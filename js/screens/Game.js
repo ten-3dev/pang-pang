@@ -94,7 +94,9 @@ export class Game {
         // 여러개의 볼을 그리기 및 업데이트
         for(let ball of this.ballArr){
             ball.draw();
+            ball.blink.start();
 
+            // 파이프에서 나오도록
             if(ball.x <= 100 && !ball.playingBall){
                 ball.moveX(1);
             }else{
@@ -140,14 +142,14 @@ export class Game {
         // 여러개의 볼과 충돌 감지
         for(let ball of this.ballArr){
             const circle = HitBoxProvider.getHitBoxCirclePosition(ball);
-        
+
             // 무기와 볼이 닿았는지
             if(HitBoxProvider.detectCollision(circle, weapon)){
                 console.log("무기와 공이 닿음");
                 this.weapon.stop();
 
                 // 무적일땐 아무런 효과 없이 바로 리턴
-                if(ball.isInvincible){
+                if(ball.blink.isInvincible){
                     return;
                 }
             
@@ -167,7 +169,6 @@ export class Game {
             // 캐릭터와 볼이 닿았는지
             if(HitBoxProvider.detectCollision(circle, square)){
                 console.log("공과 캐릭터에 닿음");
-                this.hearts.hit();
             }
         }
     }

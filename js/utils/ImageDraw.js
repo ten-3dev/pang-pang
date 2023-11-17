@@ -1,4 +1,5 @@
 import { gameConfig } from "../global/Global.js";
+import { BlinkProvider } from "./Provider.js";
 
 // 이미지 표시 관련 클래스
 export class ImageDraw {
@@ -30,12 +31,8 @@ export class Ball extends ImageDraw {
         this.dropSpeed = 0;
         this.moveSize = 5;
         this.playingBall = false; // 볼이 파이프에 나왔는지 여부
-        this.isVisible = true; // 무적시 깜빡임 변수
-        this.isInvincible = false // 무적 여부
-        this.isInvincibleTimer = null;
-        this.blinkInterval = null;
-        this.blinkCnt = 0;
         this.hitCnt = 0;
+        this.blink = new BlinkProvider(canvasProvider, 3000, 100);
     }
 
     // 공의 상태를 업데이트
@@ -76,9 +73,13 @@ export class Ball extends ImageDraw {
         leftBall.hitCnt = this.hitCnt + 1;
         rightBall.hitCnt = this.hitCnt + 1;
 
-        // 자식볼은 무적을 비활성화
+        // 자식 볼이 파이프에서 나오는 모션을 취하지 않도록
         leftBall.playingBall = true;
         rightBall.playingBall = true;
+
+        // 자식 볼은 무적 비활성화
+        leftBall.blink.isBlinkStart = false;
+        rightBall.blink.isBlinkStart = false;
 
         // 왼쪽 공은 왼쪽으로 오른쪽 공은 오른쪽으로 설정
         leftBall.moveSize = -5;
@@ -89,24 +90,11 @@ export class Ball extends ImageDraw {
 
     // 재정의
     draw() {
-        if(this.isVisible){
+        // 무적 일때 깜빡임을 위해
+        if(this.blink.isVisible){
             this.context.drawImage(this.image, this.x, this.y, this.radius * 2, this.radius * 2);
         }
-        if(this.x === 0 && !this.playingBall){ // 가장 처음에 실행후 잠시동안 무적
-            this.isInvincible = true;
-            this.blinkInterval = setInterval(() => {
-                this.blinkCnt++;
-                this.isVisible = !this.isVisible;
-                
-                // blinkCnt 가 20번 깜빡이면 종료
-                if(this.blinkCnt === 20){
-                    this.blinkCnt = 0;
-                    this.isVisible = true;
-                    this.isInvincible = false;
-                    clearInterval(this.blinkInterval);
-                }
-            }, 100);
-        }
+
     }
 }
 
@@ -120,21 +108,17 @@ export class Weapon extends ImageDraw{
         // 공과 닿으면 충돌 감지가 되기 때문에 더 밑으로 내려줌 
         this.y = this.canvasProvider.getCanvasElement().height + 20;
         this.isAttack = false;
-        this.onTimer = false;
-        this.timerTimeout = null;
-        this.warningTimeout = null;
-        this.blinkInterval = null;
-        this.isVisible = true;
+        // stop() 처리 때문에 BlinkProvider 사용하지 않고 수동으로 타이머 작성
+        this.weaponTimeout = null;
+        this.isWeaponTimeoutStart = false;
     }
 
+    // 공격 중지
     stop(){
         this.isAttack = false;
-        this.onTimer = false;
-        this.isVisible = true;
+        this.isWeaponTimeoutStart = false;
+        clearTimeout(this.weaponTimeout);
         this.y = this.canvasElement.height + 20;
-        clearTimeout(this.timerTimeout);
-        clearTimeout(this.warningTimeout);
-        clearInterval(this.blinkInterval);
     }
 
     moveX(x){
@@ -147,25 +131,17 @@ export class Weapon extends ImageDraw{
             this.y -= 15;
         }
 
-        // 위로 끝까지 갔는데도 3초동안 공격 취소를 하지 않으면 강제 취소
-        if(this.isAttack && !this.onTimer){
-            // 경고 timeOut
-            this.warningTimeout = setTimeout(() => {
-                this.blinkInterval = setInterval(() => {
-                    this.isVisible = !this.isVisible;
-                }, 100);
-            }, 1500);
-
-            // 무기 제거 timeOut
-            this.timerTimeout = setTimeout(() => {
-                this.stop();
-            }, 2000);
-            this.onTimer = true;
+        // 위로 끝까지 갔는데도 1.5초동안 공격 취소를 하지 않으면 강제 취소
+        if(this.y < 0 && this.isAttack){
+            if(!this.isWeaponTimeoutStart){
+                this.isWeaponTimeoutStart = true;
+                this.weaponTimeout = setTimeout(() => {
+                    this.stop();
+                }, 1500)
+            }
         }
 
-        if(this.isVisible){
-            this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
-        }
+        this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 }
 
@@ -175,11 +151,6 @@ export class Heart extends ImageDraw{
         this.heartArr = [];
         this.heartNum = 5;  // 초기에 하트는 5개
         this.hitNum = 0; // 닿인 수
-    }
-
-    // 캐릭터와 공이 닿였다면
-    hit(){
-        
     }
 
     draw(){

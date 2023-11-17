@@ -129,3 +129,45 @@ export class TextDrawerProvider {
         this.context.fillText(text, x, y);
     }
 }
+
+
+export class BlinkProvider {
+    constructor(canvasProvider, blinkDuration, blinkInterval) {
+        this.canvasProvider = canvasProvider;
+        this.isBlinkStart = true // 무적 시작 여부
+        this.isInvincible = false; // 무적 여부
+        this.blinkDuration = blinkDuration; // 깜빡임 시간 (milliseconds)
+        this.blinkInterval = blinkInterval; // 깜빡임 주기 (milliseconds)
+        this.delayTimeout = null;
+        this.interval = null;
+        this.timeout = null;
+        this.isVisible = true; // 깜빡임 변수
+    }
+
+    start(){
+        if(this.isBlinkStart){
+            this.isBlinkStart = false;
+            this.isInvincible = true;
+            this.delayTimeout = setTimeout(() => {
+                this.interval = setInterval(() => {
+                    this.isVisible = !this.isVisible;
+                }, this.blinkInterval);
+        
+                this.timeout = setTimeout(() => {
+                    this.stop();
+                }, this.blinkDuration);
+    
+            }, this.delay)
+        }
+    }
+
+    stop(){
+        clearInterval(this.interval);
+        clearTimeout(this.timeout);
+        clearTimeout(this.delayTimeout);
+        this.isVisible = true;
+        this.isInvincible = false;
+    }
+
+
+}
