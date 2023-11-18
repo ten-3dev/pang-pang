@@ -144,6 +144,12 @@ export class BlinkProvider {
         this.isVisible = true; // 깜빡임 변수
     }
 
+    // 계속 실행할 수 있도록 again 메서드 생성
+    again(){
+        this.isBlinkStart = true;
+        this.start();
+    }
+
     start(){
         if(this.isBlinkStart){
             this.isBlinkStart = false;

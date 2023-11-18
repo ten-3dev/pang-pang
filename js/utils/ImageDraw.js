@@ -153,6 +153,12 @@ export class Heart extends ImageDraw{
         this.hitNum = 0; // 닿인 수
     }
 
+    attacked(){
+        if(this.heartNum > 0){
+            this.heartNum--;
+        }
+    }
+
     draw(){
         for(let i = 0; i < this.heartNum; i++){
             this.x = gameConfig.getHeartX(this.canvasProvider) + (i * -50);

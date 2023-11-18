@@ -1,3 +1,5 @@
+import { BlinkProvider } from "./Provider.js";
+
 // 스프라이트 관련 기능 클래스
 export class SpriteAnimator {
     constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
@@ -80,6 +82,7 @@ export class CharacterAnimate extends SpriteAnimator {
     constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
         super(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale);
         this.isFlipped = false; // 이미지가 좌우로 반전여부
+        this.blink = new BlinkProvider(canvasProvider, 2000, 150);
     }
 
     // 객체의 바뀌는 수(스프라이트를 얼마나 자를건가)를 변경
@@ -113,7 +116,7 @@ export class CharacterAnimate extends SpriteAnimator {
         }
     }
 
-    // 재정의
+    // 재정의{
     draw(){
         this.wall_collision_detection();
 
@@ -122,18 +125,21 @@ export class CharacterAnimate extends SpriteAnimator {
         this.x += this.dxr + this.dxl;
         this.y += this.dy;
 
-        this.context.drawImage(
-            // 좌우반전
-            this.isFlipped ? this.flipImage(this.spriteImage) : this.spriteImage,
-            this.column * this.frameWidth,
-            this.row * this.frameHeight,
-            this.frameWidth,
-            this.frameHeight,
-            // 좌우반전 위치 맞추기
-            this.isFlipped ? this.x - this.frameWidth : this.x,
-            this.y,
-            this.frameWidth * this.scale,
-            this.frameHeight * this.scale
-        );
+        // 깜빡일 수 있도록 조건 추가
+        if(this.blink.isVisible){
+            this.context.drawImage(
+                // 좌우반전
+                this.isFlipped ? this.flipImage(this.spriteImage) : this.spriteImage,
+                this.column * this.frameWidth,
+                this.row * this.frameHeight,
+                this.frameWidth,
+                this.frameHeight,
+                // 좌우반전 위치 맞추기
+                this.isFlipped ? this.x - this.frameWidth : this.x,
+                this.y,
+                this.frameWidth * this.scale,
+                this.frameHeight * this.scale
+            );
+        }
     }
 }

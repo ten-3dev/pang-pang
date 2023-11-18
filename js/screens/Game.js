@@ -136,7 +136,7 @@ export class Game {
 
     detectCollision(){
         // // 충돌 감지
-        const square = HitBoxProvider.getHitBoxCharacterPosition(this.character);
+        const character = HitBoxProvider.getHitBoxCharacterPosition(this.character);
         const weapon = HitBoxProvider.getHitBoxWeaponPosition(this.weapon)
 
         // 여러개의 볼과 충돌 감지
@@ -166,9 +166,19 @@ export class Game {
                 })
             }
         
+            console.log(this.character.blink.isInvincible)
             // 캐릭터와 볼이 닿았는지
-            if(HitBoxProvider.detectCollision(circle, square)){
+            if(HitBoxProvider.detectCollision(circle, character)){
                 console.log("공과 캐릭터에 닿음");
+                // 무적이 아닐 때 생명 - 1
+                if(!this.character.blink.isInvincible){
+                    this.hearts.attacked();
+                }
+
+                // 무적 효과
+                if(!this.character.blink.isInvincible){
+                    this.character.blink.again();
+                }
             }
         }
     }
