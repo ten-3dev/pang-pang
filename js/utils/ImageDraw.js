@@ -32,7 +32,7 @@ export class Ball extends ImageDraw {
         this.moveSize = 5;
         this.playingBall = false; // 볼이 파이프에 나왔는지 여부
         this.hitCnt = 0;
-        this.blink = new BlinkProvider(canvasProvider, 3000, 100);
+        this.blink = new BlinkProvider(canvasProvider, 20, 100);
     }
 
     // 공의 상태를 업데이트

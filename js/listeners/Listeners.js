@@ -46,6 +46,14 @@ export const listener = (menu, game, pause) => {
                     game.weaponAttack();
                 }
                 break;
+            case 'Escape':
+                // 게임 중일때만 중지버튼 사용가능
+                if(gameConfig.state === 'game'){
+                    gameConfig.changePause();
+                // 이미 중지가 되어 있다면 다시 게임으로 변경
+                }else if(gameConfig.state === 'pause'){
+                    gameConfig.changeGame();
+                }
         }
     });
 

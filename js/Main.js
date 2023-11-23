@@ -2,11 +2,13 @@ import { gameConfig } from "./global/Global.js";    // 전역(공유변수)
 import { CanvasProvider } from "./utils/Provider.js";
 import { Menu } from "./screens/Menu.js";
 import { Game } from "./screens/Game.js";
+import { Pause } from "./screens/Pause.js";
 import { listener } from './listeners/Listeners.js';
 
 const canvasProvider = new CanvasProvider('canvas');
 const menu = new Menu(canvasProvider);
 const game = new Game(canvasProvider);
+const pause = new Pause(canvasProvider);
 
 gameConfig.loadImages(0, canvasProvider);
 
@@ -25,6 +27,7 @@ window.onload = () => {
                 game.start();
                 break;
             case 'pause':
+                pause.start();
                 break;
         }
     }

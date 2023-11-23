@@ -38,7 +38,8 @@ export class Game {
 
             // 1초 마다 timerCount 를 줄여줌
             this.timer = setInterval(() => {
-                this.timerCount--;
+                // state 상태가 game 일때만 카운터가 실행됨
+                if(gameConfig.state === 'game') this.timerCount--;
             }, 1000);
 
             // weapon 설정
@@ -166,17 +167,13 @@ export class Game {
                 })
             }
         
-            console.log(this.character.blink.isInvincible)
             // 캐릭터와 볼이 닿았는지
             if(HitBoxProvider.detectCollision(circle, character)){
                 console.log("공과 캐릭터에 닿음");
                 // 무적이 아닐 때 생명 - 1
                 if(!this.character.blink.isInvincible){
                     this.hearts.attacked();
-                }
-
-                // 무적 효과
-                if(!this.character.blink.isInvincible){
+                    // 무적효과
                     this.character.blink.again();
                 }
             }

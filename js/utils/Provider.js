@@ -1,3 +1,5 @@
+import { gameConfig } from "../global/Global.js";
+
 // Canvas 관련 기능 클래스
 export class CanvasProvider {
     constructor(elementId) {
@@ -132,20 +134,19 @@ export class TextDrawerProvider {
 
 
 export class BlinkProvider {
-    constructor(canvasProvider, blinkDuration, blinkInterval) {
+    constructor(canvasProvider, howManyBlink, blinkInterval) {
         this.canvasProvider = canvasProvider;
         this.isBlinkStart = true // 무적 시작 여부
         this.isInvincible = false; // 무적 여부
-        this.blinkDuration = blinkDuration; // 깜빡임 시간 (milliseconds)
+        this.howManyBlink = howManyBlink; // 깜빡거리는 회수(이 변수로 종료를 지정)
         this.blinkInterval = blinkInterval; // 깜빡임 주기 (milliseconds)
-        this.delayTimeout = null;
         this.interval = null;
-        this.timeout = null;
         this.isVisible = true; // 깜빡임 변수
     }
 
     // 계속 실행할 수 있도록 again 메서드 생성
     again(){
+        console.log(this.howManyBlink);
         this.isBlinkStart = true;
         this.start();
     }
@@ -154,23 +155,23 @@ export class BlinkProvider {
         if(this.isBlinkStart){
             this.isBlinkStart = false;
             this.isInvincible = true;
-            this.delayTimeout = setTimeout(() => {
-                this.interval = setInterval(() => {
-                    this.isVisible = !this.isVisible;
-                }, this.blinkInterval);
-        
-                this.timeout = setTimeout(() => {
+
+            let counter = this.howManyBlink;
+
+            this.interval = setInterval(() => {
+                this.isVisible = !this.isVisible;
+                if(gameConfig.state === 'game'){
+                    counter--;
+                }
+                if(counter <= 0){
                     this.stop();
-                }, this.blinkDuration);
-    
-            }, this.delay)
+                }
+            }, this.blinkInterval);
         }
     }
 
     stop(){
         clearInterval(this.interval);
-        clearTimeout(this.timeout);
-        clearTimeout(this.delayTimeout);
         this.isVisible = true;
         this.isInvincible = false;
     }

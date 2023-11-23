@@ -82,7 +82,7 @@ export class CharacterAnimate extends SpriteAnimator {
     constructor(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale) {
         super(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale);
         this.isFlipped = false; // 이미지가 좌우로 반전여부
-        this.blink = new BlinkProvider(canvasProvider, 2000, 150);
+        this.blink = new BlinkProvider(canvasProvider, 20, 150);
     }
 
     // 객체의 바뀌는 수(스프라이트를 얼마나 자를건가)를 변경
