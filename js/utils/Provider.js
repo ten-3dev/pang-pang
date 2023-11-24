@@ -146,7 +146,6 @@ export class BlinkProvider {
 
     // 계속 실행할 수 있도록 again 메서드 생성
     again(){
-        console.log(this.howManyBlink);
         this.isBlinkStart = true;
         this.start();
     }

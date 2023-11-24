@@ -110,7 +110,7 @@ export class CharacterAnimate extends SpriteAnimator {
 
     // 벽 감지 메서드
     wall_collision_detection(){
-        if (this.dxl < 0 && this.x <= -30 || this.dxr > 0 && this.x >= 1090) {
+        if (this.dxl < 0 && this.x <= -55 || this.dxr > 0 && this.x >= this.canvasElement.width - (this.frameWidth * 2)) {
             this.dxl = 0; // 왼쪽 벽에 닿으면 이동을 멈춤
             this.dxr = 0; // 오른쪽쪽 벽에 닿으면 이동을 멈춤
         }
