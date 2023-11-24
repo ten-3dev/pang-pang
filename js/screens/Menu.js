@@ -105,7 +105,7 @@ export class Menu{
     start(){
         this.canvasProvider.clearCanvas();
         this.menuDraw();
-        this.createStroke(this.context, 'blue', 8, 180, 200, 160);
+        this.createStroke(this.context, 'blue', 8, 180, 200, 140);
         this.characterDraw();
     }
 }
