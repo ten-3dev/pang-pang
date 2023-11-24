@@ -108,16 +108,19 @@ export class Weapon extends ImageDraw{
         // 공과 닿으면 충돌 감지가 되기 때문에 더 밑으로 내려줌 
         this.y = this.canvasProvider.getCanvasElement().height + 20;
         this.isAttack = false;
-        // stop() 처리 때문에 BlinkProvider 사용하지 않고 수동으로 타이머 작성
-        this.weaponTimeout = null;
-        this.isWeaponTimeoutStart = false;
+        this.isSetLocation = false;
     }
 
     // 공격 중지
     stop(){
         this.isAttack = false;
-        this.isWeaponTimeoutStart = false;
-        clearTimeout(this.weaponTimeout);
+        this.isSetLocation = false;
+        this.y = this.canvasElement.height + 20;
+    }
+
+    // weapon 을 원래 자리(화면 아래)로 재배치
+    setInitPosition(){
+        this.isAttack = false;
         this.y = this.canvasElement.height + 20;
     }
 
@@ -129,16 +132,6 @@ export class Weapon extends ImageDraw{
         // 공격
         if(this.y > 0 && this.isAttack){
             this.y -= 15;
-        }
-
-        // 위로 끝까지 갔는데도 1.5초동안 공격 취소를 하지 않으면 강제 취소
-        if(this.y < 0 && this.isAttack){
-            if(!this.isWeaponTimeoutStart){
-                this.isWeaponTimeoutStart = true;
-                this.weaponTimeout = setTimeout(() => {
-                    this.stop();
-                }, 1500)
-            }
         }
 
         this.context.drawImage(this.image, this.x, this.y, this.width, this.height);

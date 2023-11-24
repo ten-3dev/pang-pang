@@ -124,10 +124,11 @@ export class Game {
     // 무기 공격
     weaponAttack(){
         // 무기를 캐릭터의 중앙 위치로 이동
-        if(!this.weapon.isAttack){
+        if(!this.weapon.isSetLocation){
             this.weapon.moveX(this.character.x + (this.character.frameWidth / 2) + 30);
+            this.weapon.isSetLocation = true;
+            this.weapon.isAttack = true;
         }
-        this.weapon.isAttack = true;
     }
 
     weaponStop(){
@@ -146,7 +147,7 @@ export class Game {
             // 무기와 볼이 닿았는지
             if(HitBoxProvider.detectCollision(circle, weapon)){
                 console.log("무기와 공이 닿음");
-                this.weapon.stop();
+                this.weapon.setInitPosition();
 
                 // 무적일땐 아무런 효과 없이 바로 리턴
                 if(ball.blink.isInvincible){
