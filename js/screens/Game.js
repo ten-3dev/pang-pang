@@ -19,7 +19,6 @@ export class Game {
 
     init(){
         this.character = gameConfig.characters[gameConfig.characterIDX];
-        this.canvasProvider.clearCanvas();
 
         // 첫 실행 시 초기 위치 설정
         if(!this.characterIdle || !this.characterWalk){
@@ -181,6 +180,8 @@ export class Game {
     }
 
     start(){
+        this.canvasProvider.clearCanvas();
+
         this.init();
         this.changeCharacterImage();
         this.character.draw();

@@ -52,7 +52,6 @@ export class Menu{
             case 0:
                 // Start Game
                 console.log("Start Game selected");
-                this.canvasProvider.clearCanvas();
                 gameConfig.characterIDX = this.selectedChar;
                 // 게임으로 전환
                 gameConfig.changeGame();
