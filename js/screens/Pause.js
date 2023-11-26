@@ -1,5 +1,5 @@
 import { gameConfig } from "../global/Global.js";
-import { CanvasProvider } from "../utils/Provider.js";
+import { CanvasProvider, TextDrawerProvider } from "../utils/Provider.js";
 
 export class Pause{
     constructor(canvasProvider){
@@ -10,9 +10,23 @@ export class Pause{
         this.otherCanvasId = 'otherCanvas';
         this.otherCanvasDOM = null;
         this.otherCanvasProvider = null;
+
+        this.textDrawerProvider = null;
+        this.pauseItems = ["Resume", "Go to Menu"];
+        this.selectedItem = 0;
+        this.menuX = 0;
+        this.menuY = 0;
+        this.itemSpacing = 40;
     }
 
     init(){
+        this.textDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
+        this.textDrawerProvider.setFont("30px sans-serif");
+        this.menuX = this.otherCanvasProvider.getCanvasElement().width / 2;
+        this.menuY = this.otherCanvasProvider.getCanvasElement().height / 2;
+    }
+
+    createDOM(){
         // 기존 canvas 의 크기를 복사한 다른 canvas 를 생성
         if(!this.otherCanvasProvider && !this.otherCanvasDOM){
             // canvas DOM 생성
@@ -31,6 +45,9 @@ export class Pause{
 
             // 새로운 DOM Provider 객체로 생성
             this.otherCanvasProvider = new CanvasProvider(this.otherCanvasId);
+
+            // 중지 메뉴를 그리기 위해 설정 초기화
+            this.init();
         }
     }
 
@@ -49,7 +66,59 @@ export class Pause{
             this.otherCanvasProvider = null;
         }
 
-        gameConfig.changeGame();
+        if(this.selectedItem === 0){
+            gameConfig.changeGame();
+        }else if(this.selectedItem === 1){
+            gameConfig.changeMenu();
+        }
+    }
+
+
+    handlePause() {
+        switch (this.selectedItem) {
+            case 0:
+                // Resume Game
+                console.log("Resume Game");
+                this.exit();
+                break;
+            case 1:
+                // Go to Menu
+                console.log("Go to Menu");
+                this.exit();
+                break;
+        }
+    }
+
+    // 중지 메뉴 선택 그리기
+    pauseDraw(){
+        for (let i = 0; i < this.pauseItems.length; i++) {
+            const menuItem = this.pauseItems[i];
+            const x = this.menuX;
+            const y = this.menuY + i * this.itemSpacing;
+
+            if (i === this.selectedItem) {
+                this.textDrawerProvider.setColor("blue");
+            } else {
+                this.textDrawerProvider.setColor("black");
+            }
+
+            this.textDrawerProvider.drawText(menuItem, x, y);
+        }
+    }
+
+    // 조작 함수
+    arrowUp(){
+        if (this.selectedItem > 0) {
+            this.selectedItem--;
+        }
+    }
+    arrowDown(){
+        if (this.selectedItem < this.pauseItems.length - 1) {
+            this.selectedItem++;
+        }
+    }
+    enter(){
+        this.handlePause();
     }
 
     start(){
@@ -58,7 +127,8 @@ export class Pause{
             this.otherCanvasProvider.clearCanvas();
         }
 
-        this.init();
+        this.createDOM();
         this.bgDraw();
+        this.pauseDraw();
     }
 }

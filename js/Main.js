@@ -15,7 +15,7 @@ gameConfig.loadImages(0, canvasProvider);
 // 리소스 로딩을 모두 끝낸 후에 메뉴 시작
 window.onload = () => {
     // 키보드 이벤트 추가
-    listener(menu, game);
+    listener(menu, game, pause);
 
     function animate() {
         requestAnimationFrame(animate);

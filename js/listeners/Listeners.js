@@ -8,14 +8,14 @@ export const listener = (menu, game, pause) => {
                 if(gameConfig.state === 'menu'){
                     menu.arrowUp();
                 }else if(gameConfig.state === 'pause'){
-                    // 중지
+                    pause.arrowUp();
                 }
                 break;
             case 'ArrowDown':
                 if(gameConfig.state === 'menu'){
                     menu.arrowDown();
                 }else if(gameConfig.state === 'pause'){
-                    // 중지
+                    pause.arrowDown();
                 }
                 break;
             case 'ArrowLeft':
@@ -39,6 +39,8 @@ export const listener = (menu, game, pause) => {
             case 'Enter':
                 if(gameConfig.state === 'menu'){
                     menu.enter();
+                }else if(gameConfig.state === 'pause'){
+                    pause.enter();
                 }
                 break;
             case ' ':   // space
@@ -50,6 +52,8 @@ export const listener = (menu, game, pause) => {
                 // 게임 중일때만 중지버튼 사용가능
                 if(gameConfig.state === 'game'){
                     gameConfig.changePause();
+                }else if(gameConfig.state === 'pause'){
+                    pause.exit();
                 }
         }
     });
