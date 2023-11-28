@@ -1,3 +1,4 @@
+import { gameConfig } from "../global/Global.js";
 import { BlinkProvider } from "./Provider.js";
 
 // 스프라이트 관련 기능 클래스
@@ -83,6 +84,18 @@ export class CharacterAnimate extends SpriteAnimator {
         super(canvasProvider, spriteImage, framesPerSecond, numColumns, x, y, scale);
         this.isFlipped = false; // 이미지가 좌우로 반전여부
         this.blink = new BlinkProvider(canvasProvider, 20, 150);
+    }
+
+    // 초기 이미지로 만들어주는 메서드(Idle 이미지와 걷지 않는 효과)
+    initImage(){
+        this.dxr = 0;
+        this.dxl = 0;
+        this.changeNumColumns(4);
+
+        // idle 이미지 객체 저장
+        const img = new Image();
+        img.src = gameConfig.characters[gameConfig.characterIDX].spriteImage.src.replace('Walk', 'Idle');
+        this.changeImage(img);
     }
 
     // 객체의 바뀌는 수(스프라이트를 얼마나 자를건가)를 변경

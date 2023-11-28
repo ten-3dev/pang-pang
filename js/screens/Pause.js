@@ -69,12 +69,22 @@ export class Pause{
         if(this.selectedItem === 0){
             gameConfig.changeGame();
         }else if(this.selectedItem === 1){
-            for(const character of gameConfig.characters){
-                character.isFlipped = false;
-            }
-            console.log("캐릭터 반전 초기화")
+            const characters = [];
+            // 반전, 깜빡임, Idle로 초기화 설정
+            gameConfig.characters.map((e, idx) => {
+                if(gameConfig.characterIDX === idx){
+                    e.isFlipped = false;
+                    e.blink.stop();
+                    e.initImage();
+                }
+                characters.push(e)
+            })
+
+            gameConfig.characters = characters;
+            console.log("캐릭터 반전 초기화, 캐릭터 깜빡임, Idle 이미지로 변경")
             this.selectedItem = 0;
             console.log("메뉴 선택 커서 초기화")
+
             gameConfig.changeMenu();
         }
     }
