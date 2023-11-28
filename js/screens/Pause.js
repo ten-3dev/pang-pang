@@ -19,6 +19,18 @@ export class Pause{
         this.itemSpacing = 40;
     }
 
+    reset(){
+        const characters = [];
+        // 반전, 깜빡임, Idle로 초기화 설정
+        gameConfig.characters[gameConfig.characterIDX].isFlipped = false;
+        gameConfig.characters[gameConfig.characterIDX].blink.stop();
+        gameConfig.characters[gameConfig.characterIDX].initImage();
+        console.log("캐릭터 반전 초기화, 캐릭터 깜빡임, Idle 이미지로 변경")
+
+        this.selectedItem = 0;
+        console.log("메뉴 선택 커서 초기화")
+    }
+
     init(){
         this.textDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
         this.textDrawerProvider.setFont("30px sans-serif");
@@ -67,24 +79,11 @@ export class Pause{
         }
 
         if(this.selectedItem === 0){
+            gameConfig.characters[gameConfig.characterIDX].initImage();
             gameConfig.changeGame();
+            
         }else if(this.selectedItem === 1){
-            const characters = [];
-            // 반전, 깜빡임, Idle로 초기화 설정
-            gameConfig.characters.map((e, idx) => {
-                if(gameConfig.characterIDX === idx){
-                    e.isFlipped = false;
-                    e.blink.stop();
-                    e.initImage();
-                }
-                characters.push(e)
-            })
-
-            gameConfig.characters = characters;
-            console.log("캐릭터 반전 초기화, 캐릭터 깜빡임, Idle 이미지로 변경")
-            this.selectedItem = 0;
-            console.log("메뉴 선택 커서 초기화")
-
+            this.reset();
             gameConfig.changeMenu();
         }
     }

@@ -41,6 +41,7 @@ export const listener = (menu, game, pause) => {
                     game.reset();
                     menu.enter();
                 }else if(gameConfig.state === 'pause'){
+                    game.weaponStop();
                     pause.enter();
                 }
                 break;
@@ -54,6 +55,10 @@ export const listener = (menu, game, pause) => {
                 if(gameConfig.state === 'game'){
                     gameConfig.changePause();
                 }else if(gameConfig.state === 'pause'){
+                    game.weaponStop();
+
+                    // ESC를 누르면 무조건 Resume
+                    pause.selectedItem = 0;
                     pause.exit();
                 }
         }
