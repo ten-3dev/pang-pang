@@ -69,6 +69,12 @@ export class Pause{
         if(this.selectedItem === 0){
             gameConfig.changeGame();
         }else if(this.selectedItem === 1){
+            for(const character of gameConfig.characters){
+                character.isFlipped = false;
+            }
+            console.log("캐릭터 반전 초기화")
+            this.selectedItem = 0;
+            console.log("메뉴 선택 커서 초기화")
             gameConfig.changeMenu();
         }
     }

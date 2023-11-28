@@ -16,6 +16,12 @@ export class Menu{
         this.init();
     }
 
+    reset(){
+        this.selectedItem = 0;
+        this.selectedChar = 0;
+        console.log("캐릭터와 메뉴 커서를 초기화")
+    }
+
     // 초기설정
     init(){
         this.textDrawerProvider = new TextDrawerProvider(this.canvasProvider);
@@ -53,6 +59,7 @@ export class Menu{
                 // Start Game
                 console.log("Start Game selected");
                 gameConfig.characterIDX = this.selectedChar;
+                this.reset();
                 // 게임으로 전환
                 gameConfig.changeGame();
                 break;
