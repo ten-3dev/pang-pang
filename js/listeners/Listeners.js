@@ -38,6 +38,7 @@ export const listener = (menu, game, pause) => {
                 break;
             case 'Enter':
                 if(gameConfig.state === 'menu'){
+                    game.reset();
                     menu.enter();
                 }else if(gameConfig.state === 'pause'){
                     pause.enter();

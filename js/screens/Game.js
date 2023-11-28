@@ -15,13 +15,28 @@ export class Game {
         this.textDrawerProvider = new TextDrawerProvider(this.canvasProvider);
         this.hearts = new Heart(this.canvasProvider);
         this.weapon = null;
+        this.isReset = false;
+    }
+
+    reset(){
+        this.hearts = new Heart(this.canvasProvider);
+        console.log("하트 초기화 완료")
+        clearInterval(this.timer);
+        this.timerCount = 5;
+        console.log("타이머 초기화")
+        this.ballArr = []
+        console.log("볼 초기화")
+        this.isReset = true;
+        console.log("위치 및 이미지 초기화")
     }
 
     init(){
         this.character = gameConfig.characters[gameConfig.characterIDX];
 
         // 첫 실행 시 초기 위치 설정
-        if(!this.characterIdle || !this.characterWalk){
+        if(!this.characterIdle || !this.characterWalk || this.isReset){
+            this.isReset = false;
+
             // 초기 위치값 잡아주기
             const characterInitX = ((this.canvasProvider.getCanvasElement().width) / 2) - this.character.frameWidth;
             const characterInitY = this.canvasProvider.getCanvasElement().height - (this.character.frameHeight * this.character.scale);
