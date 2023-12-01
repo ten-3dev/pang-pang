@@ -188,6 +188,12 @@ export class Game {
                 // 무적이 아닐 때 생명 - 1
                 if(!this.character.blink.isInvincible){
                     this.hearts.attacked();
+
+                    // 피가 0일때 GAME OVER
+                    if(this.hearts.heartNum === 0){
+                        gameConfig.changeGameOver();
+                        return;
+                    }
                     // 무적효과
                     this.character.blink.again();
                 }

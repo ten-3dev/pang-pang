@@ -1,6 +1,6 @@
 import { gameConfig } from "../global/Global.js";
 
-export const listener = (menu, game, pause) => {
+export const listener = (menu, game, pause, gameOver) => {
     // keyDown
     document.addEventListener('keydown', e => {
         switch(e.key){
@@ -9,6 +9,8 @@ export const listener = (menu, game, pause) => {
                     menu.arrowUp();
                 }else if(gameConfig.state === 'pause'){
                     pause.arrowUp();
+                }else if(gameConfig.state === 'gameOver'){
+                    gameOver.arrowUp();
                 }
                 break;
             case 'ArrowDown':
@@ -16,6 +18,8 @@ export const listener = (menu, game, pause) => {
                     menu.arrowDown();
                 }else if(gameConfig.state === 'pause'){
                     pause.arrowDown();
+                }else if(gameConfig.state === 'gameOver'){
+                    gameOver.arrowDown();
                 }
                 break;
             case 'ArrowLeft':
@@ -43,6 +47,10 @@ export const listener = (menu, game, pause) => {
                 }else if(gameConfig.state === 'pause'){
                     game.weaponStop();
                     pause.enter();
+                }else if(gameConfig.state === 'gameOver'){
+                    game.reset();
+                    game.weaponStop();
+                    gameOver.enter();
                 }
                 break;
             case ' ':   // space

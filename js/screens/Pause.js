@@ -12,6 +12,8 @@ export class Pause{
         this.otherCanvasProvider = null;
 
         this.textDrawerProvider = null;
+        this.titleDrawerProvider = null;
+        this.title = "PAUSE"
         this.pauseItems = ["Resume", "Go to Menu"];
         this.selectedItem = 0;
         this.menuX = 0;
@@ -20,7 +22,6 @@ export class Pause{
     }
 
     reset(){
-        const characters = [];
         // 반전, 깜빡임, Idle로 초기화 설정
         gameConfig.characters[gameConfig.characterIDX].isFlipped = false;
         gameConfig.characters[gameConfig.characterIDX].blink.stop();
@@ -33,6 +34,8 @@ export class Pause{
 
     init(){
         this.textDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
+        this.titleDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
+
         this.textDrawerProvider.setFont("30px sans-serif");
         this.menuX = this.otherCanvasProvider.getCanvasElement().width / 2;
         this.menuY = this.otherCanvasProvider.getCanvasElement().height / 2;
@@ -71,6 +74,27 @@ export class Pause{
         this.otherCanvasProvider.getContext().fillRect(0, 0, width, height);
     }
 
+    // 메뉴에 보이는 빈 사각형 그리기
+    rectDraw(){
+        const width = 400;
+        const height = 600;
+        const x = (this.otherCanvasProvider.getCanvasElement().width / 2) - width / 2;
+        const y = (this.otherCanvasProvider.getCanvasElement().height / 2) - height / 2;
+
+        this.otherCanvasProvider.getContext().fillStyle = "#FFFFFF"; // 사각형의 색상
+        this.otherCanvasProvider.getContext().fillRect(x, y, width, height); // 사각형 그리기
+    }
+
+    // 메뉴 제목을 설정 (pause - game over)
+    titleDraw(){
+        const x = (this.otherCanvasProvider.getCanvasElement().width / 2);
+        const y = (this.otherCanvasProvider.getCanvasElement().height / 2) - 200;
+
+        this.titleDrawerProvider.setFont("60px sans-serif");
+        this.titleDrawerProvider.setColor('black');
+        this.titleDrawerProvider.drawText(this.title, x, y);
+    }
+
     exit(){
         if(this.otherCanvasProvider && this.otherCanvasDOM){
             document.getElementById("canvasBox").removeChild(this.otherCanvasDOM);
@@ -81,7 +105,7 @@ export class Pause{
         if(this.selectedItem === 0){
             gameConfig.characters[gameConfig.characterIDX].initImage();
             gameConfig.changeGame();
-            
+
         }else if(this.selectedItem === 1){
             this.reset();
             gameConfig.changeMenu();
@@ -144,6 +168,32 @@ export class Pause{
 
         this.createDOM();
         this.bgDraw();
+        this.rectDraw();
+        this.titleDraw();
         this.pauseDraw();
+    }
+}
+
+export class GameOver extends Pause{
+    constructor(canvasProvider){
+        super(canvasProvider)
+        this.title = "GAME OVER";
+        this.pauseItems = ["Retry", "Go to Menu"];
+    }
+
+    
+    handlePause() {
+        switch (this.selectedItem) {
+            case 0:
+                // Resume Game
+                console.log("Retry Game");
+                this.exit();
+                break;
+            case 1:
+                // Go to Menu
+                console.log("Go to Menu");
+                this.exit();
+                break;
+        }
     }
 }

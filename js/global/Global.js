@@ -22,7 +22,7 @@ const initGameConfig = {
     characterIDX: 0,
 
     // 게임-메뉴-중지 간 토글 변수 및 함수
-    state_type: ['menu', 'game', 'pause'],
+    state_type: ['menu', 'game', 'pause', 'gameOver'],
     state: 'menu',
 
     changeMenu(){
@@ -35,6 +35,10 @@ const initGameConfig = {
 
     changePause(){
         this.state = this.state_type[2]
+    },
+
+    changeGameOver(){
+        this.state = this.state_type[3]
     },
 
     // 리소스를 로드하기 위해서 처음 재귀로 모두 로드시킴
