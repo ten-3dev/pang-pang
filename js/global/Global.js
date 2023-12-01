@@ -71,6 +71,14 @@ const initGameConfig = {
     getHeartY(canvasProvider){
         return canvasProvider.getCanvasElement().height - 120;
     },
+    getScoreX(canvasProvider){
+        return canvasProvider.getCanvasElement().width / 2;
+    },
+    getScoreY(canvasProvider){
+        return canvasProvider.getCanvasElement().height - 30;
+    },
+
+    score: 0,
 }
 
 let gameConfig = {...initGameConfig};

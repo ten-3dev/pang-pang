@@ -13,10 +13,11 @@ export class Game {
         this.pipeRightImage = null;
         this.timerCount = 5;   // 초기 볼 카운트 카운트
         this.timer = null;
-        this.textDrawerProvider = new TextDrawerProvider(this.canvasProvider);
+        this.counterDrawerProvider = new TextDrawerProvider(this.canvasProvider);
         this.hearts = new Heart(this.canvasProvider);
         this.weapon = null;
         this.isReset = false;
+        this.scoreDrawerProvider = new TextDrawerProvider(this.canvasProvider);;
     }
 
     reset(){
@@ -151,19 +152,31 @@ export class Game {
         }
     }
 
+    scoreDraw(){
+        this.scoreDrawerProvider.setFont("40px sans-serif");
+
+        this.scoreDrawerProvider.setColor("white");
+
+        // 오른쪽 밑 가장자리로 위치 설정
+        const x = gameConfig.getScoreX(this.canvasProvider);
+        const y = gameConfig.getScoreY(this.canvasProvider);
+
+        this.scoreDrawerProvider.drawText(`score: ${gameConfig.score}`, x, y);
+    }
+
     counterDraw(){
-        this.textDrawerProvider.setFont("40px sans-serif");
+        this.counterDrawerProvider.setFont("40px sans-serif");
         if(this.timerCount <= 5){
-            this.textDrawerProvider.setColor("red");
+            this.counterDrawerProvider.setColor("red");
         }else{
-            this.textDrawerProvider.setColor("pink");
+            this.counterDrawerProvider.setColor("pink");
         }
 
         // 오른쪽 밑 가장자리로 위치 설정
         const x = gameConfig.getCounterX(this.canvasProvider);
         const y = gameConfig.getCounterY(this.canvasProvider);
 
-        this.textDrawerProvider.drawText(`counter: ${this.timerCount}`, x, y);
+        this.counterDrawerProvider.drawText(`counter: ${this.timerCount}`, x, y);
     }
 
     // 무기 공격
@@ -202,6 +215,15 @@ export class Game {
                 const findBall = this.ballArr.find(e => e === ball);
                 const childBalls = findBall.createChildBall();
 
+                // 점수 처리
+                if(findBall.hitCnt === 0){
+                    gameConfig.score += 20;
+                }else if(findBall.hitCnt === 1){
+                    gameConfig.score += 40;
+                }else if(findBall.hitCnt === 2){
+                    gameConfig.score += 60;
+                }
+
                 // 닿은 볼을 찾은 후 삭제
                 const balls = this.ballArr.filter(e => e != ball);
                 this.ballArr = balls;
@@ -239,6 +261,7 @@ export class Game {
         this.character.draw();
 
         this.counterDraw();
+        this.scoreDraw();
         this.ballDraw();
         this.pipeDraw();
 

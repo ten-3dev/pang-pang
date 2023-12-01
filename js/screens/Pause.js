@@ -1,5 +1,5 @@
 import { gameConfig } from "../global/Global.js";
-import { CanvasProvider, TextDrawerProvider } from "../utils/Provider.js";
+import { CanvasProvider, LocalStorageProvider, TextDrawerProvider } from "../utils/Provider.js";
 
 export class Pause{
     constructor(canvasProvider){
@@ -12,6 +12,9 @@ export class Pause{
         this.otherCanvasProvider = null;
 
         this.textDrawerProvider = null;
+        this.textDrawerProvider = null;
+        this.scoreDrawerProvider = null;
+        this.bestScoreDrawerProvider = null;
         this.titleDrawerProvider = null;
         this.title = "PAUSE"
         this.pauseItems = ["Resume", "Go to Menu"];
@@ -35,10 +38,19 @@ export class Pause{
     init(){
         this.textDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
         this.titleDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
+        this.scoreDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
+        this.bestScoreDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
 
         this.textDrawerProvider.setFont("30px sans-serif");
         this.menuX = this.otherCanvasProvider.getCanvasElement().width / 2;
         this.menuY = this.otherCanvasProvider.getCanvasElement().height / 2;
+
+        // 로컬 스토리지 조회 후 없으면 생성
+        const score = LocalStorageProvider.getItem("score");
+
+        if(!score){
+            LocalStorageProvider.setItem("score", 0);
+        }
     }
 
     createDOM(){
@@ -93,6 +105,29 @@ export class Pause{
         this.titleDrawerProvider.setFont("60px sans-serif");
         this.titleDrawerProvider.setColor('black');
         this.titleDrawerProvider.drawText(this.title, x, y);
+    }
+
+    // 점수 그리기 (pause - game over)
+    scoreDraw(){
+        const x = (this.otherCanvasProvider.getCanvasElement().width / 2);
+        const y = (this.otherCanvasProvider.getCanvasElement().height / 2) - 100;
+
+        // 로컬스토리지에 저장된 최고 점수 가져오기
+        const bestScore = LocalStorageProvider.getItem("score")
+
+        this.scoreDrawerProvider.setFont("20px sans-serif");
+        this.scoreDrawerProvider.drawText(`Score: ${gameConfig.score}`, x, y);
+
+        this.bestScoreDrawerProvider.setFont("20px sans-serif");
+        this.bestScoreDrawerProvider.drawText(`Best Score: ${bestScore}`, x, y - 20);
+
+        if(gameConfig.score <= bestScore){
+            this.bestScoreDrawerProvider.setColor('green');
+            this.scoreDrawerProvider.setColor('black');
+        }else{
+            this.scoreDrawerProvider.setColor('green');
+            this.bestScoreDrawerProvider.setColor('black');
+        }
     }
 
     exit(){
@@ -170,6 +205,7 @@ export class Pause{
         this.bgDraw();
         this.rectDraw();
         this.titleDraw();
+        this.scoreDraw();
         this.pauseDraw();
     }
 }
@@ -183,6 +219,17 @@ export class GameOver extends Pause{
 
     
     handlePause() {
+        const bestScore = LocalStorageProvider.getItem("score")
+
+        console.log(bestScore, gameConfig.score);
+
+        if(bestScore < gameConfig.score){
+            LocalStorageProvider.setItem("score", gameConfig.score);
+        }
+
+        gameConfig.score = 0;
+        console.log("점수 초기화")
+
         switch (this.selectedItem) {
             case 0:
                 // Resume Game
@@ -195,5 +242,10 @@ export class GameOver extends Pause{
                 this.exit();
                 break;
         }
+    }
+
+    // 재정의
+    start(){
+        super.start();
     }
 }

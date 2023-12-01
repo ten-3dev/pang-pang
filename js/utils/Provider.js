@@ -177,3 +177,22 @@ export class BlinkProvider {
 
 
 }
+
+export class LocalStorageProvider {
+    // 데이터 저장
+    static setItem(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  
+    // 데이터 가져오기
+    static getItem(key) {
+      const storedItem = localStorage.getItem(key);
+      return storedItem ? JSON.parse(storedItem) : null;
+    }
+  
+    // 데이터 삭제
+    static removeItem(key) {
+      localStorage.removeItem(key);
+    }
+  }
+  
