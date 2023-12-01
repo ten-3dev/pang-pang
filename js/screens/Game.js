@@ -108,8 +108,8 @@ export class Game {
             const src = `assets/balls/ball${parseInt(Math.random() * 7 + 1)}.png`;
             this.ballArr.push(new Ball(this.canvasProvider, 0, 50, 100, src));
 
-            // 두 번째부터는 20초 뒤에 볼이 추가됨
-            this.timerCount = 20;
+            // 두 번째부터는 8 ~ 15 초 뒤에 볼이 추가됨
+            this.timerCount = Math.floor(Math.random() * 8) + 8;
         }
 
         // 여러개의 볼을 그리기 및 업데이트
