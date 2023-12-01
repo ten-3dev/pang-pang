@@ -9,7 +9,8 @@ export class Game {
         this.characterWalk = null;
         this.characterIdle = null;
         this.ballArr = [];
-        this.pipeImage = null;
+        this.pipeLeftImage = null;
+        this.pipeRightImage = null;
         this.timerCount = 5;   // 초기 볼 카운트 카운트
         this.timer = null;
         this.textDrawerProvider = new TextDrawerProvider(this.canvasProvider);
@@ -94,11 +95,15 @@ export class Game {
     }
 
     pipeDraw(){
-        if(!this.pipeImage){
-            this.pipeImage = new ImageDraw(this.canvasProvider, 0, 50, 100, 200, '/assets/objects/pipe.png');
+        if(!this.pipeLeftImage){
+            this.pipeLeftImage = new ImageDraw(this.canvasProvider, 0, 50, 100, 200, '/assets/objects/pipe_left.png');
+        }
+        if(!this.pipeRightImage){
+            this.pipeRightImage = new ImageDraw(this.canvasProvider, this.canvasProvider.getCanvasElement().width - 100, 50, 100, 200, '/assets/objects/pipe_right.png');
         }
 
-        this.pipeImage.draw();
+        this.pipeRightImage.draw();
+        this.pipeLeftImage.draw();
     }
 
     ballDraw(){
@@ -106,7 +111,17 @@ export class Game {
         if(this.timerCount <= 0){
             // 랜덤으로 볼의 이미지를 결정 후 push
             const src = `assets/balls/ball${parseInt(Math.random() * 7 + 1)}.png`;
-            this.ballArr.push(new Ball(this.canvasProvider, 0, 50, 100, src));
+
+            // 왼쪽, 오른쪽 선택을 랜덤으로 0: 오른쪽, 1: 왼쪽
+            const position = Math.floor(Math.random() * 2);
+            const ball = new Ball(this.canvasProvider, 0, 50, 100, src);
+
+            if(position){  // position에 따라 초기 x 와 움직이는 방향을 미리 설정
+                ball.x = this.canvasProvider.getCanvasElement().width - ball.radius * 2;
+                ball.moveSize = -5;
+                ball.isStartLeft = false;
+            }
+            this.ballArr.push(ball);
 
             // 두 번째부터는 8 ~ 15 초 뒤에 볼이 추가됨
             this.timerCount = Math.floor(Math.random() * 8) + 8;
@@ -116,13 +131,22 @@ export class Game {
         for(let ball of this.ballArr){
             ball.draw();
             ball.blink.start();
-
+            
             // 파이프에서 나오도록
-            if(ball.x <= 100 && !ball.playingBall){
-                ball.moveX(1);
-            }else{
-                ball.playingBall = true;
-                ball.update();
+            if(ball.isStartLeft){ // 왼쪽이면
+                if(ball.x <= 100 && !ball.playingBall){
+                    ball.moveX(1);
+                }else{
+                    ball.playingBall = true;
+                    ball.update();
+                }                
+            }else{  // 오른쪽이면
+                if(ball.x >= this.canvasProvider.getCanvasElement().width - (ball.radius * 2) - 100 && !ball.playingBall){
+                    ball.moveX(-1);
+                }else{
+                    ball.playingBall = true;
+                    ball.update();
+                }  
             }
         }
     }
