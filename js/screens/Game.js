@@ -85,6 +85,12 @@ export class Game {
             this.character.changeNumColumns(4);
             this.character.changeImage(this.characterIdle); 
         }
+
+        // 좌우 방향키가 모두 눌렸을 때 Idle 이미지로 변경
+        if(this.character.dxr != 0 && this.character.dxl != 0){
+            this.character.changeNumColumns(4);
+            this.character.changeImage(this.characterIdle); 
+        }
     }
 
     pipeDraw(){
