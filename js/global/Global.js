@@ -13,7 +13,18 @@ const initGameConfig = {
         './assets/characters/7/Idle.png',
         './assets/characters/8/Idle.png',
         './assets/characters/9/Idle.png',
+        './assets/backgrounds/bg1.png',
+        './assets/backgrounds/bg2.png',
+        './assets/backgrounds/bg3.png',
+        './assets/backgrounds/bg4.png',
+        './assets/backgrounds/bg5.png',
+        './assets/backgrounds/bg6.png',
+        './assets/backgrounds/bg7.png',
+        './assets/backgrounds/bg8.png',
     ],
+
+    // 모든 배경화면 이미지를 담는 곳
+    backgrounds: [],
 
     // 모든 캐릭터 객체를 담는 곳
     characters: [],
@@ -53,6 +64,8 @@ const initGameConfig = {
             // 리소스 중 캐릭터 폴더에 있는 사진들은 곧바로 애니메이터 객체 생성
             if(this.img_src[index].includes('characters')){
                 this.characters.push(new CharacterAnimate(canvasProvider, img, 10, 4, 0, 0, 4));
+            }else if(this.img_src[index].includes('backgrounds')){
+                this.backgrounds.push(img);
             }
             this.loadImages(index + 1, canvasProvider);
         };

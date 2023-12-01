@@ -26,7 +26,7 @@ html{
 
 #canvas{
     position: absolute;
-    background-image: url("./assets/backgrounds/Summer6.png");
+    background-image: url("./assets/backgrounds/bg6.png");
     background-size: cover;
     background-repeat: no-repeat;
 }

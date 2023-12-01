@@ -35,9 +35,12 @@ export class Game {
     init(){
         this.character = gameConfig.characters[gameConfig.characterIDX];
 
-        // 첫 실행 시 초기 위치 설정
+        // 배경 설정 및 첫 실행 시 초기 위치 설정
         if(!this.characterIdle || !this.characterWalk || this.isReset){
             this.isReset = false;
+
+            const bgIdx = Math.floor(Math.random() * (gameConfig.backgrounds.length - 1));
+            this.canvasProvider.getCanvasElement().style.backgroundImage = `url("${gameConfig.backgrounds[bgIdx].src}")`;
 
             // 초기 위치값 잡아주기
             const characterInitX = ((this.canvasProvider.getCanvasElement().width) / 2) - this.character.frameWidth;
@@ -59,7 +62,7 @@ export class Game {
             }, 1000);
 
             // weapon 설정
-            this.weapon = new Weapon(this.canvasProvider, 'assets/weapons/weapon1.png');
+            this.weapon = new Weapon(this.canvasProvider, 'assets/weapons/weapon.png');
         }
     }
 

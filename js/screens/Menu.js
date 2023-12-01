@@ -88,12 +88,12 @@ export class Menu{
     }
 
     // 캐릭터 테두리 그리기
-    createStroke(context, color, lineWidth, sizeWidth, sizeHeight, y){
+    createStroke(context, color, lineWidth, sizeWidth, sizeHeight, x, y){
         this.context.strokeStyle = color;  // 테두리 색상 설정
         this.context.lineWidth = lineWidth;       // 테두리 두께 설정
         const strokeWidth = sizeWidth;
         const strokeHeight = sizeHeight;
-        const strokeX = ((this.canvas.width - strokeWidth) / 2)     // 테두리 크기 비례 자동 중앙 정렬
+        const strokeX = x - sizeWidth / 2     // 테두리 크기 비례 자동 중앙 정렬
         const strokeY = y;
         context.strokeRect(strokeX, strokeY, strokeWidth, strokeHeight);
     }
@@ -112,7 +112,9 @@ export class Menu{
     start(){
         this.canvasProvider.clearCanvas();
         this.menuDraw();
-        this.createStroke(this.context, 'blue', 8, 180, 200, 140);
+
+        // 캐릭터 및 테두리 그리기
+        this.createStroke(this.context, 'blue', 8, 180, 200, (this.canvas.width / 2), 140);
         this.characterDraw();
     }
 }
