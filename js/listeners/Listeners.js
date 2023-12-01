@@ -88,4 +88,12 @@ export const listener = (menu, game, pause, gameOver) => {
                 break;
         }
     });
+
+    // 새로고침 방지
+    window.onbeforeunload = function (event) {
+        // 사용자에게 확인 메시지 표시
+        const confirmationMessage = '페이지를 나가시겠습니까? 변경 사항이 저장되지 않을 수 있습니다.';
+        event.returnValue = confirmationMessage; // Standard
+        return confirmationMessage; // IE, Firefox
+    };      
 }

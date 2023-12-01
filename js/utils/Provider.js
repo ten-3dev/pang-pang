@@ -22,7 +22,7 @@ export class CanvasProvider {
 
 // HitBox 관련 기능 클래스
 export class HitBoxProvider{
-    static isShowHitBox = true;
+    static isShowHitBox = false;
 
     // 캐릭터마다 가지고 있는 크기(투명 제외)가 다르기 때문에 따로 숫자를 넣어서 사용
     static characterOverPosition = [
