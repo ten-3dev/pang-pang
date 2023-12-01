@@ -11,10 +11,8 @@ export class Pause{
         this.otherCanvasDOM = null;
         this.otherCanvasProvider = null;
 
-        this.textDrawerProvider = null;
-        this.textDrawerProvider = null;
+        this.menuTextDrawerProvider = null;
         this.scoreDrawerProvider = null;
-        this.bestScoreDrawerProvider = null;
         this.titleDrawerProvider = null;
         this.title = "PAUSE"
         this.pauseItems = ["Resume", "Go to Menu"];
@@ -32,31 +30,28 @@ export class Pause{
         console.log("캐릭터 반전 초기화, 캐릭터 깜빡임, Idle 이미지로 변경")
 
         this.selectedItem = 0;
-        console.log("메뉴 선택 커서 초기화")
+        console.log("중지화면 메뉴 선택 커서 초기화")
 
         this.canvasProvider.getCanvasElement().style.backgroundImage = `url("${gameConfig.backgrounds[5].src}")`;
     }
 
     init(){
-        this.textDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
+        this.menuTextDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
         this.titleDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
         this.scoreDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
-        this.bestScoreDrawerProvider = new TextDrawerProvider(this.otherCanvasProvider);
 
-        this.textDrawerProvider.setFont("30px sans-serif");
+        this.menuTextDrawerProvider.setFont("30px sans-serif");
         this.menuX = this.otherCanvasProvider.getCanvasElement().width / 2;
         this.menuY = this.otherCanvasProvider.getCanvasElement().height / 2;
 
-        // 로컬 스토리지 조회 후 없으면 생성
-        const score = LocalStorageProvider.getItem("score");
-
-        if(!score){
+        // 로컬 스토리지 조회 후 없으면 생성 (0 으로 초기값 설정)
+        if(!LocalStorageProvider.getItem("score")){
             LocalStorageProvider.setItem("score", 0);
         }
     }
 
+    // 기존 canvas 의 크기를 복사한 다른 canvas 를 생성
     createDOM(){
-        // 기존 canvas 의 크기를 복사한 다른 canvas 를 생성
         if(!this.otherCanvasProvider && !this.otherCanvasDOM){
             // canvas DOM 생성
             this.otherCanvasDOM = document.createElement("canvas");
@@ -88,7 +83,7 @@ export class Pause{
         this.otherCanvasProvider.getContext().fillRect(0, 0, width, height);
     }
 
-    // 메뉴에 보이는 빈 사각형 그리기
+    // 메뉴 사각형 그리기
     rectDraw(){
         const width = 400;
         const height = 600;
@@ -99,7 +94,7 @@ export class Pause{
         this.otherCanvasProvider.getContext().fillRect(x, y, width, height); // 사각형 그리기
     }
 
-    // 메뉴 제목을 설정 (pause - game over)
+    // 메뉴 제목을 설정 (pause, game over)
     titleDraw(){
         const x = (this.otherCanvasProvider.getCanvasElement().width / 2);
         const y = (this.otherCanvasProvider.getCanvasElement().height / 2) - 200;
@@ -111,28 +106,31 @@ export class Pause{
 
     // 점수 그리기 (pause - game over)
     scoreDraw(){
-        const x = (this.otherCanvasProvider.getCanvasElement().width / 2);
-        const y = (this.otherCanvasProvider.getCanvasElement().height / 2) - 100;
+        const scoreArr = [
+            {
+                y: (this.otherCanvasProvider.getCanvasElement().height / 2) - 100,
+                color: "black",
+                getString: `Score: ${gameConfig.score}`
+            },
+            {
+                y: (this.otherCanvasProvider.getCanvasElement().height / 2) - 120,
+                color: "green",
+                // 로컬스토리지에 저장된 최고 점수 가져오기
+                getString: `Best Score: ${LocalStorageProvider.getItem("score")}`
+            },
+        ]
 
-        // 로컬스토리지에 저장된 최고 점수 가져오기
-        const bestScore = LocalStorageProvider.getItem("score")
+        // 돌아가면서 그려줌
+        for(const score of scoreArr){
+            const x = this.otherCanvasProvider.getCanvasElement().width / 2;
 
-        this.scoreDrawerProvider.setFont("20px sans-serif");
-        this.scoreDrawerProvider.drawText(`Score: ${gameConfig.score}`, x, y);
-
-        this.bestScoreDrawerProvider.setFont("20px sans-serif");
-        this.bestScoreDrawerProvider.drawText(`Best Score: ${bestScore}`, x, y - 20);
-
-        if(gameConfig.score <= bestScore){
-            this.bestScoreDrawerProvider.setColor('green');
-            this.scoreDrawerProvider.setColor('black');
-        }else{
-            this.scoreDrawerProvider.setColor('green');
-            this.bestScoreDrawerProvider.setColor('black');
+            this.scoreDrawerProvider.setColor(score.color);
+            this.scoreDrawerProvider.drawText(score.getString, x, score.y);
         }
     }
 
     exit(){
+        // 생성한 객체들을 null로 초기화
         if(this.otherCanvasProvider && this.otherCanvasDOM){
             document.getElementById("canvasBox").removeChild(this.otherCanvasDOM);
             this.otherCanvasDOM = null;
@@ -173,12 +171,12 @@ export class Pause{
             const y = this.menuY + i * this.itemSpacing;
 
             if (i === this.selectedItem) {
-                this.textDrawerProvider.setColor("blue");
+                this.menuTextDrawerProvider.setColor("blue");
             } else {
-                this.textDrawerProvider.setColor("black");
+                this.menuTextDrawerProvider.setColor("black");
             }
 
-            this.textDrawerProvider.drawText(menuItem, x, y);
+            this.menuTextDrawerProvider.drawText(menuItem, x, y);
         }
     }
 
@@ -223,8 +221,7 @@ export class GameOver extends Pause{
     handlePause() {
         const bestScore = LocalStorageProvider.getItem("score")
 
-        console.log(bestScore, gameConfig.score);
-
+        // 최고기록보다 현재 점수가 더 크면 최고기록 갱신
         if(bestScore < gameConfig.score){
             LocalStorageProvider.setItem("score", gameConfig.score);
         }
@@ -244,10 +241,5 @@ export class GameOver extends Pause{
                 this.exit();
                 break;
         }
-    }
-
-    // 재정의
-    start(){
-        super.start();
     }
 }

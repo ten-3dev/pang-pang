@@ -5,21 +5,24 @@ import { HitBoxProvider, TextDrawerProvider } from "../utils/Provider.js";
 export class Game {
     constructor(canvasProvider) {
         this.canvasProvider = canvasProvider;
+
         this.character = null;
         this.characterWalk = null;
         this.characterIdle = null;
-        this.ballArr = [];
-        this.pipeLeftImage = null;
-        this.pipeRightImage = null;
-        this.timerCount = 5;   // 초기 볼 카운트 카운트
+        this.pipeImage = null;
         this.timer = null;
-        this.counterDrawerProvider = new TextDrawerProvider(this.canvasProvider);
-        this.hearts = new Heart(this.canvasProvider);
         this.weapon = null;
+
+        this.ballArr = [];
+        this.timerCount = 5;   // 초기 볼 카운트 카운트
         this.isReset = false;
-        this.scoreDrawerProvider = new TextDrawerProvider(this.canvasProvider);;
+        
+        this.counterDrawerProvider = new TextDrawerProvider(this.canvasProvider);
+        this.scoreDrawerProvider = new TextDrawerProvider(this.canvasProvider);
+        this.hearts = new Heart(this.canvasProvider);
     }
 
+    // retry를 위해 초기화
     reset(){
         this.hearts = new Heart(this.canvasProvider);
         console.log("하트 초기화 완료")
@@ -39,6 +42,7 @@ export class Game {
         if(!this.characterIdle || !this.characterWalk || this.isReset){
             this.isReset = false;
 
+            // 배경을 배경 이미지의 수만큼 랜덤으로 선택
             const bgIdx = Math.floor(Math.random() * (gameConfig.backgrounds.length - 1));
             this.canvasProvider.getCanvasElement().style.backgroundImage = `url("${gameConfig.backgrounds[bgIdx].src}")`;
 
@@ -99,15 +103,21 @@ export class Game {
     }
 
     pipeDraw(){
-        if(!this.pipeLeftImage){
-            this.pipeLeftImage = new ImageDraw(this.canvasProvider, 0, 50, 100, 200, '/assets/objects/pipe_left.png');
-        }
-        if(!this.pipeRightImage){
-            this.pipeRightImage = new ImageDraw(this.canvasProvider, this.canvasProvider.getCanvasElement().width - 100, 50, 100, 200, '/assets/objects/pipe_right.png');
-        }
+        const imgArr = [
+            {
+                x: 0,
+                src: "/assets/objects/pipe_left.png" 
+            },
+            {
+                x: this.canvasProvider.getCanvasElement().width - 100,
+                src: "/assets/objects/pipe_right.png" 
+            }
+        ]
 
-        this.pipeRightImage.draw();
-        this.pipeLeftImage.draw();
+        for(const img of imgArr){
+            this.pipeImage = new ImageDraw(this.canvasProvider, img.x, 50, 100, 200, img.src);
+            this.pipeImage.draw();
+        }
     }
 
     ballDraw(){
@@ -160,7 +170,6 @@ export class Game {
 
         this.scoreDrawerProvider.setColor("white");
 
-        // 오른쪽 밑 가장자리로 위치 설정
         const x = gameConfig.getScoreX(this.canvasProvider);
         const y = gameConfig.getScoreY(this.canvasProvider);
 
@@ -196,8 +205,8 @@ export class Game {
         this.weapon.stop();
     }
 
+    // 충돌 감지
     detectCollision(){
-        // // 충돌 감지
         const character = HitBoxProvider.getHitBoxCharacterPosition(this.character);
         const weapon = HitBoxProvider.getHitBoxWeaponPosition(this.weapon)
 

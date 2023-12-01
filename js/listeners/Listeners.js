@@ -27,8 +27,6 @@ export const listener = (menu, game, pause, gameOver) => {
                     menu.arrowLeft();
                 }else if(gameConfig.state === 'game'){
                     game.arrowLeft();
-                }else if(gameConfig.state === 'pause'){
-                    // 중지
                 }
                 break;
             case 'ArrowRight':
@@ -36,20 +34,18 @@ export const listener = (menu, game, pause, gameOver) => {
                     menu.arrowRight();
                 }else if(gameConfig.state === 'game'){
                     game.arrowRight();
-                }else if(gameConfig.state === 'pause'){
-                    // 중지
                 }
                 break;
             case 'Enter':
                 if(gameConfig.state === 'menu'){
-                    game.reset();
+                    game.reset();       // 메뉴 화면에서 Enter 시 game reset
                     menu.enter();
                 }else if(gameConfig.state === 'pause'){
-                    game.weaponStop();
+                    game.weaponStop();  // 중지 화면에서 Enter 시 무기 제거
                     pause.enter();
                 }else if(gameConfig.state === 'gameOver'){
-                    game.reset();
-                    game.weaponStop();
+                    game.reset();       // 게임오버 화면에서 Enter 시 game reset
+                    game.weaponStop();  // 게임오버 화면에서 Enter 시 무기 제거
                     gameOver.enter();
                 }
                 break;
@@ -63,9 +59,9 @@ export const listener = (menu, game, pause, gameOver) => {
                 if(gameConfig.state === 'game'){
                     gameConfig.changePause();
                 }else if(gameConfig.state === 'pause'){
-                    game.weaponStop();
+                    game.weaponStop();  // 중지 화면에서 ESC 시 무기 제거
 
-                    // ESC를 누르면 무조건 Resume
+                    // 중지 화면에서 ESC를 누르면 무조건 Resume
                     pause.selectedItem = 0;
                     pause.exit();
                 }

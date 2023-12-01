@@ -6,13 +6,16 @@ export class Menu{
         this.canvasProvider = canvasProvider;
         this.canvas = canvasProvider.getCanvasElement();
         this.context = canvasProvider.getContext();
+
+        this.menuTextDrawerProvider = null;
+
         this.menuItems = ["Start Game", "Exit"];
         this.selectedItem = 0;
         this.selectedChar = 0;
         this.itemSpacing = 40;
         this.menuX = this.canvas.width / 2;
         this.menuY = this.canvas.height / 2;
-        this.textDrawerProvider = null;
+        
         this.init();
     }
 
@@ -24,8 +27,8 @@ export class Menu{
 
     // 초기설정
     init(){
-        this.textDrawerProvider = new TextDrawerProvider(this.canvasProvider);
-        this.textDrawerProvider.setFont("30px sans-serif");
+        this.menuTextDrawerProvider = new TextDrawerProvider(this.canvasProvider);
+        this.menuTextDrawerProvider.setFont("30px sans-serif");
     }
 
     // 조작 함수
@@ -59,7 +62,7 @@ export class Menu{
                 // Start Game
                 console.log("Start Game selected");
                 gameConfig.characterIDX = this.selectedChar;
-                this.reset();
+                this.reset();   // 다시 메뉴에 진입할 걸 대비해 미리 reset
                 // 게임으로 전환
                 gameConfig.changeGame();
                 break;
@@ -78,24 +81,24 @@ export class Menu{
             const y = this.menuY + i * this.itemSpacing;
 
             if (i === this.selectedItem) {
-                this.textDrawerProvider.setColor("blue");
+                this.menuTextDrawerProvider.setColor("blue");
             } else {
-                this.textDrawerProvider.setColor("black");
+                this.menuTextDrawerProvider.setColor("black");
             }
 
-            this.textDrawerProvider.drawText(menuItem, x, y);
+            this.menuTextDrawerProvider.drawText(menuItem, x, y);
         }
     }
 
     // 캐릭터 테두리 그리기
-    createStroke(context, color, lineWidth, sizeWidth, sizeHeight, x, y){
+    createStroke(color, lineWidth, sizeWidth, sizeHeight, x, y){
         this.context.strokeStyle = color;  // 테두리 색상 설정
         this.context.lineWidth = lineWidth;       // 테두리 두께 설정
         const strokeWidth = sizeWidth;
         const strokeHeight = sizeHeight;
-        const strokeX = x - sizeWidth / 2     // 테두리 크기 비례 자동 중앙 정렬
+        const strokeX = x - sizeWidth / 2     // 더 정확히 중앙에 올 수 있도록
         const strokeY = y;
-        context.strokeRect(strokeX, strokeY, strokeWidth, strokeHeight);
+        this.context.strokeRect(strokeX, strokeY, strokeWidth, strokeHeight);
     }
 
     // 캐릭터 위치 선정 및 그리기
@@ -114,7 +117,7 @@ export class Menu{
         this.menuDraw();
 
         // 캐릭터 및 테두리 그리기
-        this.createStroke(this.context, 'blue', 8, 180, 200, (this.canvas.width / 2), 140);
+        this.createStroke('blue', 8, 180, 200, (this.canvas.width / 2), 140);
         this.characterDraw();
     }
 }

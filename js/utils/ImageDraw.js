@@ -26,14 +26,13 @@ export class Ball extends ImageDraw {
         // 원 모양이기 때문에 width, height 대신 radius 로 대체
         super(canvasProvider, x, y, 0, 0, imageSrc);
         this.radius = radius;
-        this.bounceHeight = 100;
-        this.gravity = 0.5;
+        this.gravity = 0.5;         // 내려가는 속도
         this.dropSpeed = 0;
-        this.moveSize = 5;
-        this.playingBall = false; // 볼이 파이프에 나왔는지 여부
-        this.hitCnt = 0;
+        this.moveSize = 5;          // 좌우로 움직이는 속도
+        this.playingBall = false;   // 볼이 파이프에 나왔는지 여부
+        this.hitCnt = 0;            // this 가 몇 번 무기에 공격 당했는지 카운터
         this.blink = new BlinkProvider(canvasProvider, 20, 100);
-        this.isStartLeft = true; // 왼쪽 파이프에서 시작함
+        this.isStartLeft = true;    // 왼쪽 파이프에서 시작함(초기값)
     }
 
     // 공의 상태를 업데이트
@@ -66,27 +65,21 @@ export class Ball extends ImageDraw {
 
     // 무기와 닿으면 자식 공 생성 메서드
     createChildBall(){
-        // 오른쪽 공 생성
-        const leftBall = new Ball(this.canvasProvider, this.x, this.y, this.radius / 1.4, this.image.src);
-        const rightBall = new Ball(this.canvasProvider, this.x, this.y, this.radius / 1.4, this.image.src);
+        const childBall = []
 
-        // 맞은 횟수 측정
-        leftBall.hitCnt = this.hitCnt + 1;
-        rightBall.hitCnt = this.hitCnt + 1;
+        for(let i = 0; i < 2; i++){
+            const ball = new Ball(this.canvasProvider, this.x, this.y, this.radius / 1.4, this.image.src);
 
-        // 자식 볼이 파이프에서 나오는 모션을 취하지 않도록
-        leftBall.playingBall = true;
-        rightBall.playingBall = true;
+            ball.hitCnt = this.hitCnt + 1;
+            ball.playingBall = true;            // 파이프에서 나오는 모션 비활성화
+            ball.blink.isBlinkStart = false;    // 자식 볼은 무적 비활성화
+            // 첫 번째 공은 왼쪽으로 두 번째 공은 오른쪽으로 설정(이동)
+            ball.moveSize = i === 0 ? -5 : 5;
 
-        // 자식 볼은 무적 비활성화
-        leftBall.blink.isBlinkStart = false;
-        rightBall.blink.isBlinkStart = false;
+            childBall.push(ball);
+        }
 
-        // 왼쪽 공은 왼쪽으로 오른쪽 공은 오른쪽으로 설정
-        leftBall.moveSize = -5;
-        rightBall.moveSize = 5;
-
-        return [leftBall, rightBall];
+        return childBall;
     }
 
     // 재정의
@@ -108,8 +101,8 @@ export class Weapon extends ImageDraw{
         // height 그대로 주면 무기를 쓰지 않아도 hitBox는 살짝 나와있기 때문에 
         // 공과 닿으면 충돌 감지가 되기 때문에 더 밑으로 내려줌 
         this.y = this.canvasProvider.getCanvasElement().height + 20;
-        this.isAttack = false;
-        this.isSetLocation = false;
+        this.isAttack = false;          // 공격 여부
+        this.isSetLocation = false;     // 무기의 x를 고정시키기 위해
     }
 
     // 공격 중지
@@ -121,8 +114,8 @@ export class Weapon extends ImageDraw{
 
     // weapon 을 원래 자리(화면 아래)로 재배치
     setInitPosition(){
-        this.isAttack = false;
-        this.y = this.canvasElement.height + 20;
+        this.stop();
+        this.isSetLocation = true;
     }
 
     moveX(x){
@@ -142,9 +135,7 @@ export class Weapon extends ImageDraw{
 export class Heart extends ImageDraw{
     constructor(canvasProvider) {
         super(canvasProvider, 0, 0, 40, 40, 'assets/objects/heart.png');
-        this.heartArr = [];
         this.heartNum = 5;  // 초기에 하트는 5개
-        this.hitNum = 0; // 닿인 수
     }
 
     attacked(){

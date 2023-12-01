@@ -22,50 +22,101 @@ export class CanvasProvider {
 
 // HitBox 관련 기능 클래스
 export class HitBoxProvider{
+    static isShowHitBox = true;
+
+    // 캐릭터마다 가지고 있는 크기(투명 제외)가 다르기 때문에 따로 숫자를 넣어서 사용
+    static characterOverPosition = [
+        {
+            leftX: 60,
+            rightX: 45,
+            y: 55,
+            width: -145
+        },
+        {
+            leftX: 60,
+            rightX: 40,
+            y: 65,
+            width: -145
+        },
+        {
+            leftX: 60,
+            rightX: 40,
+            y: 65,
+            width: -145
+        },
+        {
+            leftX: 60,
+            rightX: 40,
+            y: 65,
+            width: -145
+        },
+        {
+            leftX: 60,
+            rightX: 40,
+            y: 65,
+            width: -145
+        },
+        {
+            leftX: 60,
+            rightX: 40,
+            y: 65,
+            width: -145
+        },
+        {
+            leftX: 60,
+            rightX: 40,
+            y: 80,
+            width: -145
+        },
+        {
+            leftX: 60,
+            rightX: 40,
+            y: 100,
+            width: -145
+        },
+        {
+            leftX: 60,
+            rightX: 40,
+            y: 100,
+            width: -145
+        }
+    ]
+
+    static showHitBox(context, color, x, y, width, height){
+        if(!this.isShowHitBox) return;
+
+        context.strokeStyle = color;
+        context.strokeRect(x, y, width, height);
+    }
+
     static getHitBoxCirclePosition(circle){
-        const x = circle.x;
-        const y = circle.y;
+        const x = circle.x + circle.radius;
+        const y = circle.y + circle.radius;
         const radius = circle.radius;
 
-        const result = {
-            x: x + circle.radius,
-            y: y + circle.radius,
-            radius: radius
-        };
-        
-        circle.context.strokeStyle = 'blue';
-        circle.context.strokeRect(x, y, radius * 2, radius * 2);
+        this.showHitBox(circle.context, 'blue', circle.x, circle.y, radius * 2, radius * 2);
 
-        return result;
+        return {x, y, radius};
     }
 
     static getHitBoxWeaponPosition(weapon){
-        const x = weapon.x;
+        const x = weapon.x + 10;
         const y = weapon.y;
-        const width = weapon.width;
+        const width = weapon.width - 20;
         const height = weapon.height;
 
-        const result = {
-            x: x,
-            y: y,
-            width: width,
-            height: height
-        };
-        
-        weapon.context.strokeStyle = 'blue';
-        weapon.context.strokeRect(result.x, result.y, result.width, result.height);
+        this.showHitBox(weapon.context, 'blue', x, y, width, height);
 
-
-        return result;
+        return {x, y, width: width, height};
     }
 
     // hitBox 의 크기를 보내줌
     // Flipped 을 하게 되면 위치가 조금씩 틀리기 때문에 삼항연산자 사용
-    // 캐릭터마다 가지고 있는 크기(투명 제외)가 다르기 때문에 따로 숫자를 넣어서 사용 (추후 객체로 만들어 사용하기 쉽게 만들 예정)
     static getHitBoxCharacterPosition(character){
-        const correctionX = character.isFlipped ? 60 : 45;
-        const correctionY = character.isFlipped ? 55 : 55;
-        const correctionWidth = character.isFlipped ? -145 : -145;
+        const overPosition = this.characterOverPosition[gameConfig.characterIDX];
+        const correctionX = character.isFlipped ? overPosition.leftX : overPosition.rightX;
+        const correctionY = overPosition.y;
+        const correctionWidth = overPosition.width;
 
         const result = {
             x: character.x + correctionX,
@@ -74,8 +125,7 @@ export class HitBoxProvider{
             height: character.frameHeight * character.scale,
         }
 
-        character.context.strokeStyle = 'red';
-        character.context.strokeRect(result.x, result.y, result.width, result.height);
+        this.showHitBox(character.context, 'red', result.x, result.y, result.width, result.height);
 
         return result;
     }
@@ -132,7 +182,7 @@ export class TextDrawerProvider {
     }
 }
 
-
+// 깜빡거릴 수 있도록 도와주는 프로바이더
 export class BlinkProvider {
     constructor(canvasProvider, howManyBlink, blinkInterval) {
         this.canvasProvider = canvasProvider;
@@ -178,6 +228,7 @@ export class BlinkProvider {
 
 }
 
+// 로컬 스토리지 이용
 export class LocalStorageProvider {
     // 데이터 저장
     static setItem(key, value) {
