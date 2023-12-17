@@ -32,6 +32,8 @@ export class Pause{
         this.selectedItem = 0;
         console.log("중지화면 메뉴 선택 커서 초기화")
 
+        gameConfig.score = 0;
+
         this.canvasProvider.getCanvasElement().style.backgroundImage = `url("${gameConfig.backgrounds[5].src}")`;
     }
 
@@ -137,10 +139,12 @@ export class Pause{
             this.otherCanvasProvider = null;
         }
 
+        // 다시 하기
         if(this.selectedItem === 0){
             gameConfig.characters[gameConfig.characterIDX].initImage();
             gameConfig.changeGame();
 
+        // 메뉴로 돌아가기
         }else if(this.selectedItem === 1){
             this.reset();
             gameConfig.changeMenu();
